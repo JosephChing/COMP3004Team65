@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <unistd.h>
-
+#include <QTimerEvent>
+#include "heartwave.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -16,11 +16,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
-public slots:
-    void updateGraph();
 private:
     Ui::MainWindow *ui;
-    QVector<double> xVec, yVec;
+
+    int timerID;
+
+
+    Heartwave * heartwave;
+protected:
+    void timerEvent(QTimerEvent *event);
 };
 #endif // MAINWINDOW_H
