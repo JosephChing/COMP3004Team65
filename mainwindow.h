@@ -2,7 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QTimerEvent>
+#include "heartwave.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -17,5 +18,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    int timerID;
+
+
+    Heartwave * heartwave;
+protected:
+    void timerEvent(QTimerEvent *event);
 };
 #endif // MAINWINDOW_H
