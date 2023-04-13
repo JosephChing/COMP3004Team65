@@ -1,11 +1,12 @@
-#ifndef BREATHPACER_H
-#define BREATHPACER_H
+#include <iostream>
 
-
-class BreathPacer
-{
+class BreathPacer {
 public:
-    BreathPacer();
-};
+  BreathPacer();
+  int clock;
+  int currentPosition;
+  int frequency;
 
-#endif // BREATHPACER_H
+  void update();
+  void changeFrequency(int newFrequency);
+};

@@ -511,6 +511,9 @@
     </property>
    </widget>
    <widget class="QSlider" name="breathPaceIndicator">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>59</x>
@@ -518,6 +521,9 @@
       <width>481</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="maximum">
+     <number>100</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
