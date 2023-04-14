@@ -81,6 +81,10 @@ void MainWindow::updateGraph(){
 
 void MainWindow::endOfGraph()
 {
+    this->heartwave->setActivePulseReading(false);
+    currentGraphSecond = 0;
+    ui->graph->clearItems();
+    ui->graph->replot();
 
 }
 
@@ -174,8 +178,11 @@ void MainWindow::navigateSubMenu() {
     if (masterMenu->getName() == "VIEW") {
         return;
     }
-    /*if(masterMenu->getName() == "SELECT SESSION"){
+    if(masterMenu->getName() == "SELECT SESSION"){
         if(masterMenu->getMenuItems()[index] == "START SESSION 1"){
+
+            this->heartwave->setActivePulseReading(true);
+            ui->graph->setVisible(true);
             qInfo("Session 1"); // GRAPH 1
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 2"){
@@ -184,10 +191,12 @@ void MainWindow::navigateSubMenu() {
         else if (masterMenu->getMenuItems()[index] == "START SESSION 3"){
             qInfo("Session 3"); // GRAPH 3
         }
-    }*/
+    }
 
     if(masterMenu->getName() == "START SESSION 1") {
+
         if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
+           endOfGraph();
             qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
         }
     }
@@ -223,8 +232,9 @@ void MainWindow::navigateSubMenu() {
             if(this->heartwave->currentSession == nullptr){
                 qInfo()<<"no current session";
             }
-            this->heartwave->setActivePulseReading(true);
-            ui->graph->setVisible(true);
+
+//            this->heartwave->setActivePulseReading(true);
+
 
         }
         MainWindow::updateMenu(masterMenu->getName(), masterMenu->getMenuItems());

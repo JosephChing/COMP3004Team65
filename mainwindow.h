@@ -23,6 +23,7 @@ public:
     ~MainWindow();
     void initGraph();
     void updateGraph();
+    void endOfGraph();
 
 private:
     Ui::MainWindow *ui;
