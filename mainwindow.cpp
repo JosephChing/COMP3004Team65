@@ -59,12 +59,18 @@ void MainWindow::initializeMainMenu(Menu* m) {
     m->addChildMenu(history);
     Menu* pacer = new Menu("BREATH PACER", {"10", "20", "30"}, settings);
     settings->addChildMenu(pacer);
-    Menu* startSession1 = new Menu("START SESSION 1", {"Do something"}, m);
-    Menu* startSession2 = new Menu("START SESSION 2", {}, m);
-    Menu* startSession3 = new Menu("START SESSION 3", {}, m);
+    Menu* startSession1 = new Menu("START SESSION 1", {"Currently running session 1 (click to end)"}, sessions);
+    Menu* startSession2 = new Menu("START SESSION 2", {"Currently running session 2 (click to end)"}, sessions);
+    Menu* startSession3 = new Menu("START SESSION 3", {"Currently running session 3 (click to end)"}, sessions);
+    Menu* endSession1 = new Menu("Currently running session 1 (click to end)", {}, startSession1);
+    Menu* endSession2 = new Menu("Currently running session 2 (click to end)", {}, startSession2);
+    Menu* endSession3 = new Menu("Currently running session 3 (click to end)", {}, startSession3);
     sessions->addChildMenu(startSession1);
     sessions->addChildMenu(startSession2);
     sessions->addChildMenu(startSession3);
+    startSession1->addChildMenu(endSession1);
+    startSession2->addChildMenu(endSession2);
+    startSession3->addChildMenu(endSession3);
     Menu* viewHistory = new Menu("VIEW",{"Something for now"}, history);
     Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
     history->addChildMenu(viewHistory);
@@ -110,18 +116,31 @@ void MainWindow::navigateSubMenu() {
     if (masterMenu->getName() == "VIEW") {
         return;
     }
-    if(masterMenu->getName() == "SELECT SESSION"){
+    /*if(masterMenu->getName() == "SELECT SESSION"){
         if(masterMenu->getMenuItems()[index] == "START SESSION 1"){
             qInfo("Session 1"); // GRAPH 1
-            return;
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 2"){
             qInfo("Session 2"); // GRAPH 2
-            return;
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 3"){
             qInfo("Session 3"); // GRAPH 3
-            return;
+        }
+    }*/
+
+    if(masterMenu->getName() == "START SESSION 1") {
+        if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
+            qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
+        }
+    }
+    if(masterMenu->getName() == "START SESSION 2") {
+        if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
+            qInfo("This is where end of graph 2 should run"); // end of graph function should run here for graph 2
+        }
+    }
+    else if(masterMenu->getName() == "START SESSION 3") {
+        if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
+            qInfo("This is where end of graph 3 should run"); // end of graph function should run here for graph 3
         }
     }
 
@@ -159,7 +178,6 @@ void MainWindow::navigateSubMenu() {
 }
 
 void MainWindow::navigateToMainMenu() {
-
         if (masterMenu->getParent()->getName() == "SESSIONS") {
             // stop the session get the time, and add to sessions array
         }
@@ -184,7 +202,6 @@ void MainWindow::navigateToMainMenu() {
 }
 
 void MainWindow::navigateBack() {
-
     ui->rightButton->blockSignals(true);
     ui->leftButton->blockSignals(true);
         if (masterMenu->getParent()->getName() == "START SESSION") {
