@@ -2,14 +2,21 @@
 #include "ui_mainwindow.h"
 #include <QTimer>
 
+#include <QObject>
+#include <QDebug>
+
+int currentGraphSecond = 0;
+
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow), timerID(0)
 {
+
     ui->setupUi(this);
     killTimer(timerID);
-<<<<<<< Updated upstream
-=======
+
     ui->graph->setVisible(false);
 
     this->heartwave = new Heartwave;
@@ -40,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
+
 void MainWindow::initGraph()
 {
     ui->graph->addGraph(0);
@@ -48,13 +56,12 @@ void MainWindow::initGraph()
     ui->graph->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
 
 }
->>>>>>> Stashed changes
+
 
     timerID = startTimer(1000);
 
-<<<<<<< Updated upstream
     heartwave = new Heartwave();
-=======
+
 
 //function updates the info of graph each cycle of clock
 //it uses currentGraphSecond global variable to index array
@@ -91,7 +98,21 @@ void MainWindow::endOfGraph()
     this->heartwave->currentSession->generateSummary();
     QString qstr = QString::fromStdString(this->heartwave->currentSession->summary);
     updateMenu("HEY",{qstr});
->>>>>>> Stashed changes
+}
+
+
+void MainWindow::updateGraph(){
+    this->ui->graph->graph(0)->addData(xVec[currentGraphSecond],yVec[currentGraphSecond]);
+
+    if(xVec[0]>10){
+        this->ui->graph->xAxis->setRange(xVec[currentGraphSecond]-10,xVec[currentGraphSecond]+1);
+    }
+    this->ui->graph->replot();/*
+    xVec.remove(0);
+    yVec.remove(0);*/
+    currentGraphSecond += 1;
+    qDebug()<<xVec[0];
+
 }
 
 MainWindow::~MainWindow()
@@ -102,10 +123,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-<<<<<<< Updated upstream
-    heartwave->update();
 
-=======
+    heartwave->update();
 //    heartwave->update();
 
     if ((this->heartwave->getActivePulseReading() == true)){
@@ -256,7 +275,7 @@ void MainWindow::navigateToMainMenu() {
 
     updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
 }
->>>>>>> Stashed changes
+
 
 
 
