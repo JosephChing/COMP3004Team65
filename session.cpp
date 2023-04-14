@@ -1,9 +1,8 @@
 #include "session.h"
 
-Session::Session(std::string id)
-    : sessionID(id), clock(0), coheranceRating(0), length(0), started(false),
-      ended(false), paused(false),
-      hrArray(60 * N, 0), coheranceLevelArray(60 * N, 0), seconds(60* N, 0) {
+Session::Session(int id)
+    : sessionID(id), clock(0), coheranceRating(0), length(60), started(false),
+      ended(false), paused(false){
     time = std::chrono::system_clock::now();
 }
 

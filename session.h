@@ -4,7 +4,7 @@
 #include <chrono>
 #include <ctime>
 #include <string>
-#include <vector>
+#include <QVector>
 #include <sstream>
 
 class Session {
@@ -13,13 +13,13 @@ public:
     static const int N = 10;
 
     // Properties
-    std::string sessionID;
+    int sessionID;
     std::chrono::system_clock::time_point time;
     int clock;
-    std::vector<double> hrArray; // length 60 * N
-    std::vector<double> coheranceLevelArray; // length 60 * N
+    QVector<double> hrArray; // length 60 * N
+    QVector<double> coheranceLevelArray; // length 60 * N
 
-    std::vector<double> seconds;
+    QVector<double> seconds;
 
     double coheranceRating;
     double length;
@@ -28,7 +28,7 @@ public:
     bool paused;
 
     // Constructor
-    Session(std::string id);
+    Session(int i );
 
     // Methods
     void update();

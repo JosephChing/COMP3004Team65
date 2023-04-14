@@ -3,20 +3,24 @@
 #include <QTimer>
 #include "mainwindow.h"
 
+int currentGraphSecond = 0;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow), timerID(0)
 {
     ui->setupUi(this);
     killTimer(timerID);
-    ui->widget->setVisible(false);
+    ui->graph->setVisible(false);
 
-    timerID = startTimer(1000);
-
+    this->heartwave = new Heartwave;
+    timerID = startTimer(100);
+    initGraph();
     heartwave = new Heartwave();
     masterMenu = new Menu("MAIN MENU", {"SETTINGS","START SESSION","LOG/HISTORY"}, nullptr);
     mainMenu = masterMenu;
     initializeMainMenu(masterMenu);
+
 
     activeQListWidget = ui->mainMenuListView;
     activeQListWidget->addItems(masterMenu->getMenuItems());
@@ -33,24 +37,79 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
+
+
+
+
+void MainWindow::initGraph()
+{
+    ui->graph->addGraph(0);
+    ui->graph->yAxis->setRange(40,90);
+    ui->graph->xAxis->setRange(0,30);
+    ui->graph->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+
+}
+
+
+
+//function updates the info of graph each cycle of clock
+//it uses currentGraphSecond global variable to index array
+void MainWindow::updateGraph(){
+
+    this->ui->graph->graph(0)->addData(this->heartwave->currentSession->seconds[currentGraphSecond],this->heartwave->currentSession->hrArray[currentGraphSecond]);
+    if(this->heartwave->currentSession->seconds[currentGraphSecond]>15){
+        this->ui->graph->xAxis->setRange(this->heartwave->currentSession->seconds[currentGraphSecond]-15,this->heartwave->currentSession->seconds[currentGraphSecond]+10);
+    }
+
+    this->ui->graph->replot();
+
+    if(currentGraphSecond+1 == this->heartwave->currentSession->length){
+
+        qInfo()<<"End of array";
+        this->heartwave->setActivePulseReading(false);
+        endOfGraph();
+    }
+
+     this->ui->graph->replot();
+
+    currentGraphSecond += 1;
+
+    qInfo()<<this->heartwave->currentSession->hrArray.capacity();
+}
+
+
+
+void MainWindow::endOfGraph()
+{
+
+}
+
+
+
+
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
 
+
+
+
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-    heartwave->update();
+//    heartwave->update();
 
+    if ((this->heartwave->getActivePulseReading() == true)){
+        updateGraph();
+    }
 
-
-
-    ui->breathPaceIndicator->setValue(heartwave->breathPacer->currentPosition);
+//    ui->breathPaceIndicator->setValue(heartwave->breathPacer->currentPosition);
 }
 
 void MainWindow::initializeMainMenu(Menu* m) {
     Menu* settings = new Menu("SETTINGS", {"BREATH PACER"}, m);
+
     Menu* sessions = new Menu("START SESSION", {"Something 2"}, m);
     Menu* history = new Menu("LOG/HISTORY", {"VIEW","CLEAR"}, m);
 
@@ -58,6 +117,7 @@ void MainWindow::initializeMainMenu(Menu* m) {
     m->addChildMenu(sessions);
     m->addChildMenu(history);
     Menu* pacer = new Menu("BREATH PACER", {"10", "20", "30"}, m);
+
     settings->addChildMenu(pacer);
     Menu* viewHistory = new Menu("VIEW",{"Something for now"}, history);
     Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
@@ -116,10 +176,17 @@ void MainWindow::navigateSubMenu() {
         }
     }
 
+        //Start of heartwave session
     if (masterMenu->get(index)->getMenuItems().length() > 0) {
         masterMenu = masterMenu->get(index);
         if(masterMenu->getName() == "START SESSION") {
-            ui->widget->setVisible(true);
+            //if there is no current session selected
+            if(this->heartwave->currentSession == nullptr){
+                qInfo()<<"no current session";
+            }
+            this->heartwave->setActivePulseReading(true);
+            ui->graph->setVisible(true);
+
         }
         MainWindow::updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
 
@@ -148,7 +215,7 @@ void MainWindow::navigateToMainMenu() {
         masterMenu = masterMenu->getParent();
         updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
     }
-    ui->widget->setVisible(false);
+    ui->graph->setVisible(false);
 
     while (masterMenu->getName() != "MAIN MENU") {
         masterMenu = masterMenu->getParent();
@@ -175,6 +242,6 @@ void MainWindow::navigateBack() {
         masterMenu = masterMenu->getParent();
         updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
     }
-    ui->widget->setVisible(false);
+    ui->graph->setVisible(false);
 }
 
