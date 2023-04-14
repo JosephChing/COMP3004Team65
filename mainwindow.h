@@ -15,6 +15,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+<<<<<<< Updated upstream
+=======
+    void initGraph();
+    void updateGraph();
+    void endOfGraph();
+>>>>>>> Stashed changes
 
 private:
     Ui::MainWindow *ui;

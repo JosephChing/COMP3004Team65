@@ -5,6 +5,7 @@ Session::Session(std::string id)
       ended(false), paused(false),
       hrArray(60 * N, 0), coheranceLevelArray(60 * N, 0), seconds(60* N, 0) {
     time = std::chrono::system_clock::now();
+    this->summary = "";
 }
 
 void Session::update() {
@@ -25,12 +26,13 @@ void Session::calculateCoheranceLevel() {
     // Your implementation here
 }
 
-std::string Session::generateSummary() {
-    std::stringstream summary;
-    summary << "Session ID: " << sessionID << '\n'
-            << "Session Length: " << length << '\n'
-            << "Coherance Rating: " << coheranceRating << '\n';
-    return summary.str();
+void Session::generateSummary() {
+//    std::stringstream summaryx;
+//    summaryx << "Session ID: " << sessionID << '\n'
+//            << "Session Length: " << length << '\n'
+//            << "Coherance Rating: " << coheranceRating << '\n';
+    this->summary = "HERE IS A TEST SUMMARY";
+//    return summary.str();
 }
 
 int Session::getSessionLength() {

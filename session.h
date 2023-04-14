@@ -26,6 +26,9 @@ public:
     bool started;
     bool ended;
     bool paused;
+    std::string summary;
+
+
 
     // Constructor
     Session(std::string id);
@@ -39,13 +42,15 @@ public:
 
     void calculateCoheranceLevel();
 
-    std::string generateSummary();
+    void generateSummary();
 
     int getSessionLength();
 
     void interruptSession();
 
     void resumeSession();
+
+
 };
 
 #endif // SESSION_H
