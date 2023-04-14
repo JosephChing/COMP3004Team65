@@ -21,6 +21,7 @@ SOURCES += \
     heartwave.cpp \
     main.cpp \
     mainwindow.cpp \
+    menu.cpp \
     qcustomplot.cpp \
     session.cpp
 
@@ -29,6 +30,7 @@ HEADERS += \
     breathpacer.h \
     heartwave.h \
     mainwindow.h \
+    menu.h \
     qcustomplot.h \
     session.h
 

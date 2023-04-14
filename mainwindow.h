@@ -2,8 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidget>
 #include <QTimerEvent>
+#include <QVector>
+
 #include "heartwave.h"
+#include "menu.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -18,12 +22,21 @@ public:
 
 private:
     Ui::MainWindow *ui;
-
     int timerID;
-
-
     Heartwave * heartwave;
+    Menu* masterMenu;
+    Menu* mainMenu;
+    QListWidget *activeQListWidget;
+    void updateMenu(const QString, const QStringList);
+    void initializeMainMenu(Menu*);
+
 protected:
     void timerEvent(QTimerEvent *event);
+private slots:
+    void navigateDownMenu();
+    void navigateUpMenu();
+    void navigateSubMenu();
+    void navigateToMainMenu();
+    void navigateBack();
 };
 #endif // MAINWINDOW_H
