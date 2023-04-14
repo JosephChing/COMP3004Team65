@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     timerID = startTimer(1000);
 
     heartwave = new Heartwave();
-    masterMenu = new Menu("MAIN MENU", {"SETTINGS","START SESSION","LOG/HISTORY"}, nullptr);
+    masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
     mainMenu = masterMenu;
     initializeMainMenu(masterMenu);
 
@@ -51,14 +51,20 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
 void MainWindow::initializeMainMenu(Menu* m) {
     Menu* settings = new Menu("SETTINGS", {"BREATH PACER"}, m);
-    Menu* sessions = new Menu("START SESSION", {"Something 2"}, m);
+    Menu* sessions = new Menu("SELECT SESSION", {"START SESSION 1", "START SESSION 2", "START SESSION 3"}, m);
     Menu* history = new Menu("LOG/HISTORY", {"VIEW","CLEAR"}, m);
 
     m->addChildMenu(settings);
     m->addChildMenu(sessions);
     m->addChildMenu(history);
-    Menu* pacer = new Menu("BREATH PACER", {"10", "20", "30"}, m);
+    Menu* pacer = new Menu("BREATH PACER", {"10", "20", "30"}, settings);
     settings->addChildMenu(pacer);
+    Menu* startSession1 = new Menu("START SESSION 1", {"Do something"}, m);
+    Menu* startSession2 = new Menu("START SESSION 2", {}, m);
+    Menu* startSession3 = new Menu("START SESSION 3", {}, m);
+    sessions->addChildMenu(startSession1);
+    sessions->addChildMenu(startSession2);
+    sessions->addChildMenu(startSession3);
     Menu* viewHistory = new Menu("VIEW",{"Something for now"}, history);
     Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
     history->addChildMenu(viewHistory);
@@ -104,10 +110,26 @@ void MainWindow::navigateSubMenu() {
     if (masterMenu->getName() == "VIEW") {
         return;
     }
+    if(masterMenu->getName() == "SELECT SESSION"){
+        if(masterMenu->getMenuItems()[index] == "START SESSION 1"){
+            qInfo("Session 1"); // GRAPH 1
+            return;
+        }
+        else if (masterMenu->getMenuItems()[index] == "START SESSION 2"){
+            qInfo("Session 2"); // GRAPH 2
+            return;
+        }
+        else if (masterMenu->getMenuItems()[index] == "START SESSION 3"){
+            qInfo("Session 3"); // GRAPH 3
+            return;
+        }
+    }
 
     if (masterMenu->getName() == "CLEAR") {
         if (masterMenu->getMenuItems()[index] == "YES") {
             //delete sessions array
+            qInfo("YEES");
+            return;
         }
         else {
             navigateBack();
@@ -118,8 +140,12 @@ void MainWindow::navigateSubMenu() {
 
     if (masterMenu->get(index)->getMenuItems().length() > 0) {
         masterMenu = masterMenu->get(index);
-        if(masterMenu->getName() == "START SESSION") {
-            ui->widget->setVisible(true);
+        if(masterMenu->getName() == "SELECT SESSION") {
+            /*if(masterMenu->getMenuItems()[index] == "START SESSION 1") {
+                //session 1 stuff
+                qInfo("Session 1");
+                return;
+            }*/
         }
         MainWindow::updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
 
