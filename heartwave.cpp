@@ -86,6 +86,7 @@ void Heartwave::setActivePulseReading(bool b)
 {
     this->activePulseReading = b;
 }
+<<<<<<< Updated upstream
 
 void Heartwave::turnOn() {
     this->on = true;
@@ -111,3 +112,5 @@ void Heartwave::turnOff() {
 //}
 
 
+=======
+>>>>>>> Stashed changes
