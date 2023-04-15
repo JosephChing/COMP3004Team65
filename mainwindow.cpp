@@ -9,9 +9,11 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow), timerID(0)
 {
+
     ui->setupUi(this);
     killTimer(timerID);
     ui->graph->setVisible(false);
+    ui->summary->setVisible(false);
 
     this->heartwave = new Heartwave;
     timerID = startTimer(100);
@@ -33,8 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->selectButton, &QPushButton::pressed, this, &MainWindow::navigateSubMenu);
     connect(ui->menuButton, &QPushButton::pressed, this, &MainWindow::navigateToMainMenu);
     connect(ui->returnButton, &QPushButton::pressed, this, &MainWindow::navigateBack);
-
-
 }
 
 
@@ -79,6 +79,7 @@ void MainWindow::updateGraph(){
         qInfo()<<"End of array";
         this->heartwave->setActivePulseReading(false);
         endOfGraph();
+
     }
 
      this->ui->graph->replot();
@@ -219,19 +220,27 @@ void MainWindow::navigateSubMenu() {
     if(masterMenu->getName() == "START SESSION 1") {
         endOfGraph();
         if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
-
+            ui->summary->setPlainText("Summary 1");
+            ui->summary->show();
+            ui->summary->setVisible(true);
             qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
         }
     }
     if(masterMenu->getName() == "START SESSION 2") {
         endOfGraph();
         if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
+            ui->summary->setPlainText("Summary 2");
+            ui->summary->show();
+            ui->summary->setVisible(true);
             qInfo("This is where end of graph 2 should run"); // end of graph function should run here for graph 2
         }
     }
     else if(masterMenu->getName() == "START SESSION 3") {
         endOfGraph();
         if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
+            ui->summary->setPlainText("Summary 3");
+            ui->summary->show();
+            ui->summary->setVisible(true);
             qInfo("This is where end of graph 3 should run"); // end of graph function should run here for graph 3
         }
     }
@@ -289,6 +298,7 @@ void MainWindow::navigateToMainMenu() {
         updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
     }
     ui->graph->setVisible(false);
+    ui->summary->setVisible(false);
 
     while (masterMenu->getName() != "MAIN MENU") {
         masterMenu = masterMenu->getParent();
@@ -315,4 +325,5 @@ void MainWindow::navigateBack() {
         updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
     }
     ui->graph->setVisible(false);
+    ui->summary->setVisible(false);
 }
