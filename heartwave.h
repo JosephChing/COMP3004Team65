@@ -28,6 +28,8 @@ public:
     bool getActivePulseReading();
     void setActivePulseReading(bool b);
 
+    std::string currentLight();
+
 private:
     int clock;
     bool activePulseReading;

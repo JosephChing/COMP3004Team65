@@ -12,8 +12,8 @@ void BreathPacer::update() {
     } else {
         clock = 0;
     }
-
     currentPosition = (clock / frequency) * 100;
+    std::cout<< "currentPosition "<< currentPosition << std::endl;
 }
 
 void BreathPacer::changeFrequency(int newFrequency) {

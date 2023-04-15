@@ -37,7 +37,9 @@ public:
 
     void calculateAchievementScore();
 
-    void calculateCoheranceLevel();
+    void setCoheranceRating(double cl);
+
+    double getCoheranceRating();
 
     std::string generateSummary();
 

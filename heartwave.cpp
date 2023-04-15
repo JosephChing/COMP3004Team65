@@ -1,6 +1,6 @@
 #include "heartwave.h"
 
-Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(nullptr), */battery(new Battery()), breathPacer(new BreathPacer())
+Heartwave::Heartwave() : clock(0), activePulseReading(true), /*currentSession(nullptr), */battery(new Battery()), breathPacer(new BreathPacer())
 {
 
 
@@ -10,7 +10,7 @@ Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(n
 
 
     session1->hrArray = {60, 63, 67, 70, 72, 74, 75, 74, 72, 70, 67, 63, 60, 57, 53, 50, 48, 46, 45, 46, 48, 50, 53, 57, 60, 63, 67, 70, 72, 74, 75, 74, 72, 70, 67, 63, 60, 57, 53, 50, 60, 63, 67, 70, 72, 74, 75, 74, 72, 70, 67, 63, 60, 57, 53, 50, 48, 46, 55, 60};
-    session1->coheranceLevelArray = {4.2, 0, 0, 0, 0, 12.3, 0, 0, 0, 0, 7.8, 0, 0, 0, 0, 9.5, 0, 0, 0, 0, 3.4, 0, 0, 0, 0, 15.1, 0, 0, 0, 0, 6.2, 0, 0, 0, 0, 11.8, 0, 0, 0, 0, 8.6, 0, 0, 0, 0, 14.3, 0, 0, 0, 0, 5.9, 0, 0, 0, 0, 10.4, 0, 0, 0, 0};
+    session1->coheranceLevelArray = {1, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0, 0, 0, 0};
 
     session2->hrArray = {60, 64, 70, 80, 90, 100, 110, 120, 130, 140, 150, 140, 130, 120, 110, 100, 90, 80, 70, 64, 60, 64, 70, 80, 90, 100, 110, 120, 130, 140, 150, 140, 130, 120, 110, 100, 90, 80, 70, 64, 60, 64, 70, 80, 90, 100, 110, 120, 130, 140, 150, 140, 130, 120, 110, 100, 90, 80, 70, 60};
     session2->coheranceLevelArray = {1.5, 0, 0, 0, 0, 1.2, 0, 0, 0, 0, 1.9, 0, 0, 0, 0, 1.3, 0, 0, 0, 0, 1.6, 0, 0, 0, 0, 1.8, 0, 0, 0, 0, 1.1, 0, 0, 0, 0, 1.7, 0, 0, 0, 0, 1.4, 0, 0, 0, 0, 1.9, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1.2, 0, 0, 0, 0};
@@ -75,6 +75,24 @@ bool Heartwave::getActivePulseReading()
 void Heartwave::setActivePulseReading(bool b)
 {
     this->activePulseReading = b;
+}
+
+
+
+std::string Heartwave::currentLight()
+{
+    if(this->currentSession->getCoheranceRating()<=1){
+        return "red";
+    }
+
+    if(this->currentSession->getCoheranceRating()<=2){
+        return "yellow";
+    }
+
+    if(this->currentSession->getCoheranceRating()<=3){
+        return "green";
+    }
+    return "red";
 }
 
 

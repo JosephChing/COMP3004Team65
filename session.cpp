@@ -20,9 +20,19 @@ void Session::calculateAchievementScore() {
     // Your implementation here
 }
 
-void Session::calculateCoheranceLevel() {
-    // Your implementation here
+void Session::setCoheranceRating(double cl)
+{
+
+    this->coheranceRating = cl;
+
 }
+
+double Session::getCoheranceRating()
+{
+    return this->coheranceRating;
+}
+
+
 
 std::string Session::generateSummary() {
     std::stringstream summary;
