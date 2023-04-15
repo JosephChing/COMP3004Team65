@@ -1,11 +1,13 @@
 #ifndef HEARTWAVE_H
 #define HEARTWAVE_H
 
+#include <QVector>
 #include <vector>
 #include "session.h"
 
 #include "battery.h"
 #include "breathpacer.h"
+
 class Heartwave
 {
 public:
@@ -23,6 +25,8 @@ public:
     void interruptSession(int);
     void resetData();
     void replaceBattery();
+    bool getActivePulseReading();
+    void setActivePulseReading(bool b);
 
 private:
     int clock;
