@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->summary->setVisible(false);
 
     this->heartwave = new Heartwave;
-    timerID = startTimer(100);
+    timerID = startTimer(300);
     initGraph();
     heartwave = new Heartwave();
     masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     activeQListWidget->addItems(masterMenu->getMenuItems());
     activeQListWidget->setCurrentRow(0);
     ui->menuLabel->setText(masterMenu->getName());
-
+    ui->breathPaceComboBox->setVisible(false);
 
     connect(ui->upButton, &QPushButton::pressed, this, &MainWindow::navigateUpMenu);
     connect(ui->downButton, &QPushButton::pressed, this, &MainWindow::navigateDownMenu);
@@ -190,6 +190,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 }
 
 void MainWindow::initializeMainMenu(Menu* m) {
+
     Menu* settings = new Menu("SETTINGS", {"BREATH PACER"}, m);
     Menu* sessions = new Menu("SELECT SESSION", {"START SESSION 1", "START SESSION 2", "START SESSION 3"}, m);
     Menu* history = new Menu("LOG/HISTORY", {"VIEW","CLEAR"}, m);
@@ -197,7 +198,7 @@ void MainWindow::initializeMainMenu(Menu* m) {
     m->addChildMenu(settings);
     m->addChildMenu(sessions);
     m->addChildMenu(history);
-    Menu* pacer = new Menu("BREATH PACER", {"10", "20", "30"}, settings);
+    Menu* pacer = new Menu("BREATH PACER", {"CHANGE IN DROP BOX"}, settings);
     settings->addChildMenu(pacer);
     Menu* startSession1 = new Menu("START SESSION 1", {"Currently running session 1 (click to end)"}, sessions);
     Menu* startSession2 = new Menu("START SESSION 2", {"Currently running session 2 (click to end)"}, sessions);
@@ -215,6 +216,8 @@ void MainWindow::initializeMainMenu(Menu* m) {
     Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
     history->addChildMenu(viewHistory);
     history->addChildMenu(clearHistory);
+
+
 }
 
 void MainWindow::navigateUpMenu() {
@@ -257,6 +260,7 @@ void MainWindow::navigateSubMenu() {
         return;
     }
     if(masterMenu->getName() == "BREATH PACER") {
+        ui->breathPaceComboBox->setVisible(true);
         return;
     }
     if(masterMenu->getName() == "SELECT SESSION"){
@@ -411,6 +415,7 @@ void MainWindow::initGraph()
 
 
 void MainWindow::navigateBack() {
+    ui->breathPaceComboBox->setVisible(false);
     if(masterMenu->getName() == "MAIN MENU") {
         return;
     }
@@ -445,4 +450,10 @@ void MainWindow::navigateBack() {
 void MainWindow::on_batteryReplaceButton_clicked()
 {
     this->heartwave->replaceBattery();
+}
+
+void MainWindow::on_breathPaceComboBox_currentIndexChanged(int index)
+{
+    this->heartwave->breathPacer->changeFrequency(index+1);
+    qInfo()<<this->heartwave->breathPacer->frequency;
 }
