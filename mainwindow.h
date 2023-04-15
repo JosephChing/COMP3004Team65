@@ -45,5 +45,6 @@ private slots:
     void navigateToMainMenu();
     void navigateBack();
     void on_batteryReplaceButton_clicked();
+    void on_breathPaceComboBox_currentIndexChanged(int index);
 };
 #endif // MAINWINDOW_H
