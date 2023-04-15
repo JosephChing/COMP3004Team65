@@ -4,6 +4,7 @@ Session::Session(int id)
     : sessionID(id), clock(0),heartRate(0), coheranceRating(0), length(60), achievementScore(0), started(false),
       ended(false), paused(false){
     time = std::chrono::system_clock::now();
+    this->summary = "";
 }
 
 void Session::update() {
