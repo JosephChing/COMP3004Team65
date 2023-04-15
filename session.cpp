@@ -1,7 +1,7 @@
 #include "session.h"
 
 Session::Session(int id)
-    : sessionID(id), clock(0),heartRate(0), coheranceRating(0), length(60), started(false),
+    : sessionID(id), clock(0),heartRate(0), coheranceRating(0), length(60), achievementScore(0), started(false),
       ended(false), paused(false){
     time = std::chrono::system_clock::now();
 }
@@ -24,6 +24,7 @@ void Session::start() {
     started = true;
     ended = false;
     clock = 0;
+    achievementScore = 0;
 }
 
 void Session::stop() {
@@ -31,14 +32,14 @@ void Session::stop() {
 }
 
 void Session::updateCoheranceRating() {
-    // Your implementation here
     if (coheranceLevelArray[clock] != 0) {
         this->coheranceRating = coheranceLevelArray[clock];
+        calculateAchievementScore();
     }
 }
 
 void Session::calculateAchievementScore() {
-    // Your implementation here
+    achievementScore += coheranceRating;
 }
 double Session::getCoheranceRating()
 {
@@ -51,7 +52,7 @@ std::string Session::generateSummary() {
     std::stringstream summary;
     summary << "Session ID: " << sessionID << '\n'
             << "Session Length: " << length << '\n'
-            << "Coherance Rating: " << coheranceRating << '\n';
+            << "Achievement Score: " << achievementScore << '\n';
     return summary.str();
 }
 

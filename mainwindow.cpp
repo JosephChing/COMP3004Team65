@@ -45,24 +45,6 @@ MainWindow::MainWindow(QWidget *parent)
 //function updates the info of graph each cycle of clock
 //it uses currentGraphSecond global variable to index array
 void MainWindow::updateGraph(){
-
-
-
-//    if(currentGraphSecond==0){
-//        initGraph();
-//    }
-
-//    this->ui->graph->graph(0)->addData(this->heartwave->currentSession->seconds[currentGraphSecond],this->heartwave->currentSession->hrArray[currentGraphSecond]);
-//    if(this->heartwave->currentSession->seconds[currentGraphSecond]>15){
-//        this->ui->graph->xAxis->setRange(this->heartwave->currentSession->seconds[currentGraphSecond]-15,this->heartwave->currentSession->seconds[currentGraphSecond]+10);
-//    }
-    //updating the light via checking the coherence array
-//    if(this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond]!=0){
-
-//        this->heartwaveurrentSession->setCoheranceRating(this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond]);
-    //        qInfo()<<this->heart->cwave->currentSession->coheranceLevelArray[currentGraphSecond];
-//    }
-
     if(heartwave->currentSession != nullptr) {
         if(heartwave->currentSession->clock == 0) {
             initGraph();
@@ -77,19 +59,6 @@ void MainWindow::updateGraph(){
         this->ui->graph->replot();
         updateLight();
     }
-
-
-//    if(currentGraphSecond+1 == this->heartwave->currentSession->length){
-
-//        qInfo()<<"End of array";
-//        this->heartwave->setActivePulseReading(false);
-//        endOfGraph();
-
-//    }
-
-//     this->ui->graph->replot();
-
-//    currentGraphSecond += 1;
 }
 
 void MainWindow::endOfGraph()
@@ -127,8 +96,6 @@ void MainWindow::endOfGraph()
 
 void MainWindow::updateLight()
 {
-
-//    qInfo()<<"In update Light";
     QPixmap  noLight(":/lightsPictures/noLights.png");
     QPixmap  red(":/lightsPictures/redLight.png");
     QPixmap  yellow(":/lightsPictures/yellowLight.png");
@@ -148,46 +115,20 @@ void MainWindow::updateLight()
 
     if(heartwave->currentSession->coheranceRating <= 1){
         ui->lightPicture->setPixmap(red);
-//        qInfo()<<"In update Light red";
         return;
-
     }
     else if(heartwave->currentSession->coheranceRating > 1 && heartwave->currentSession->coheranceRating <= 2){
         ui->lightPicture->setPixmap(yellow);
-//        qInfo()<<"In update Light yel";
         return;
     }
     else if(heartwave->currentSession->coheranceRating > 1){
         ui->lightPicture->setPixmap(green);
-//        qInfo()<<"In update Light green";
         return;
     }
     else
     {
         ui->lightPicture->setPixmap(noLight);
     }
-
-//    if(this->heartwave->currentLight()=="red"){
-//        ui->lightPicture->setPixmap(red);
-//        qInfo()<<"In update Light red";
-//        return;
-
-//    }
-//    else if(this->heartwave->currentLight()=="yellow"){
-//        ui->lightPicture->setPixmap(yellow);
-//        qInfo()<<"In update Light yel";
-//        return;
-//    }
-//    else if(this->heartwave->currentLight()=="green"){
-//        ui->lightPicture->setPixmap(green);
-//        qInfo()<<"In update Light green";
-//        return;
-//    }
-//    else
-//    {
-//        ui->lightPicture->setPixmap(noLight);
-//    }
-
 }
 
 
@@ -220,6 +161,30 @@ void MainWindow::timerEvent(QTimerEvent *event)
             ui->lowBatteryLabel->setVisible(true);
         }
         ui->batteryLabel->setNum(heartwave->battery->getBatteryLevel());
+
+        if(heartwave->currentSession != nullptr) {
+            if(heartwave->currentSession->started) {
+                // Status display UI.
+                ui->coheranceLabel->setNum(heartwave->currentSession->coheranceRating);
+                ui->achievmentLabel->setNum(heartwave->currentSession->achievementScore);
+                ui->lengthLabel->setNum(heartwave->currentSession->clock);
+            } else {
+                ui->coheranceLabel->setNum(0.0);
+                ui->achievmentLabel->setNum(0.0);
+                ui->lengthLabel->setNum(0.0);
+            }
+        }
+
+
+        if(heartwave->currentSession != nullptr) {
+            if(heartwave->currentSession->ended && heartwave->getActivePulseReading() == true) {
+                ui->summary->setVisible(true);
+                ui->summary->setPlainText(QString::fromStdString(heartwave->currentSession->generateSummary()));
+
+            } else {
+                ui->summary->setVisible(false);
+            }
+        }
 
     }
 }
@@ -299,6 +264,7 @@ void MainWindow::navigateSubMenu() {
 
         if(masterMenu->getMenuItems()[index] == "START SESSION 1"){
             initGraph();
+            ui->summary->setVisible(false);
             this->heartwave->setCurrentSession(1);
             this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
@@ -307,6 +273,7 @@ void MainWindow::navigateSubMenu() {
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 2"){
             initGraph();
+            ui->summary->setVisible(false);
             this->heartwave->setCurrentSession(2);
             this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
@@ -315,6 +282,7 @@ void MainWindow::navigateSubMenu() {
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 3"){\
             initGraph();
+            ui->summary->setVisible(false);
             this->heartwave->setCurrentSession(3);
             this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
@@ -323,43 +291,45 @@ void MainWindow::navigateSubMenu() {
         }
     }
 
-    if(masterMenu->getName() == "START SESSION 1") {
-        this->heartwave->setActivePulseReading(true);
-        endOfGraph();
-        heartwave->setCurrentSession(1);
-        if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
-            ui->summary->setPlainText("Summary 1");
-            ui->summary->show();
-            ui->summary->setVisible(true);
-           endOfGraph();
-            qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
-            heartwave->currentSession->interruptSession();
-        }
-    }
-    if(masterMenu->getName() == "START SESSION 2") {
-        this->heartwave->setActivePulseReading(true);
-        endOfGraph();
-        heartwave->setCurrentSession(2);
-        if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
-            ui->summary->setPlainText("Summary 2");
-            ui->summary->show();
-            ui->summary->setVisible(true);
-            qInfo("This is where end of graph 2 should run"); // end of graph function should run here for graph 2
-            heartwave->currentSession->interruptSession();
-        }
-    }
-    else if(masterMenu->getName() == "START SESSION 3") {
-        this->heartwave->setActivePulseReading(true);
-        endOfGraph();
-        heartwave->setCurrentSession(3);
-        if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
-            ui->summary->setPlainText("Summary 3");
-            ui->summary->show();
-            ui->summary->setVisible(true);
-            qInfo("This is where end of graph 3 should run"); // end of graph function should run here for graph 3
-            heartwave->currentSession->interruptSession();
-        }
-    }
+//    if(masterMenu->getName() == "START SESSION 1") {
+//        this->heartwave->setActivePulseReading(true);
+//        endOfGraph();
+//        heartwave->setCurrentSession(1);
+//        if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
+//            ui->summary->setPlainText("Summary 1");
+//            ui->summary->show();
+//            ui->summary->setVisible(true);
+//           endOfGraph();
+//            qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
+//            heartwave->currentSession->interruptSession();
+//        }
+//    }
+//    if(masterMenu->getName() == "START SESSION 2") {
+//        this->heartwave->setActivePulseReading(true);
+//        endOfGraph();
+//        heartwave->setCurrentSession(2);
+//        if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
+//            ui->summary->setPlainText("Summary 2");
+//            ui->summary->show();
+//            ui->summary->setVisible(true);
+//            qInfo("This is where end of graph 2 should run"); // end of graph function should run here for graph 2
+//            heartwave->currentSession->interruptSession();
+//        }
+//    }
+//    else if(masterMenu->getName() == "START SESSION 3") {
+//        this->heartwave->setActivePulseReading(true);
+//        endOfGraph();
+//        heartwave->setCurrentSession(3);
+//        if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
+//            ui->summary->setPlainText("Summary 3");
+//            ui->summary->show();
+//            ui->summary->setVisible(true);
+//            qInfo("This is where end of graph 3 should run"); // end of graph function should run here for graph 3
+//            heartwave->currentSession->interruptSession();
+//        }
+//    }
+
+
 
     if (masterMenu->getName() == "CLEAR") {
         if (masterMenu->getMenuItems()[index] == "YES") {
@@ -428,17 +398,9 @@ void MainWindow::navigateToMainMenu() {
 
 void MainWindow::initGraph()
 {
-//    if(currentGraphSecond == 0){
-//        ui->graph->clearGraphs();
-//        ui->graph->clearItems();
-//    }
     ui->graph->clearGraphs();
     ui->graph->clearItems();
-//    ui->graph->replot();
-
     ui->graph->addGraph(0);
-//    ui->graph->graph(0)->data().clear();
-
     ui->graph->yAxis->setRange(40,200);
     ui->graph->xAxis->setRange(0,30);
     ui->graph->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
@@ -472,6 +434,8 @@ void MainWindow::navigateBack() {
     ui->summary->setVisible(false);
 
     qInfo()<< "Clearing graph data";
+
+    heartwave->setActivePulseReading(false);
 
     heartwave->currentSession->stop();
 
