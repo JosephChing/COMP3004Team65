@@ -24,6 +24,7 @@ public:
 
     double heartRate;
     double coheranceRating;
+    double achievementScore;
     double length;
     bool started;
     bool ended;
