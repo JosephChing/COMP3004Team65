@@ -24,6 +24,7 @@ public:
     void initGraph();
     void updateGraph();
     void endOfGraph();
+    void updateLight();
 
 private:
     Ui::MainWindow *ui;
