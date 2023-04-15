@@ -1,6 +1,6 @@
 #include "heartwave.h"
 
-Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(nullptr), */battery(new Battery()), breathPacer(new BreathPacer())
+Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(nullptr), */battery(new Battery()), on(false), breathPacer(new BreathPacer())
 {
 
 
@@ -26,19 +26,14 @@ Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(n
 
     this->currentSession = session1;
 
-
-
     this->sessions.push_back(session1);
     this->sessions.push_back(session2);
     this->sessions.push_back(session3);
-
-
 }
 
 
 void Heartwave::update()
 {
-
     if (currentSession != nullptr ) {
         currentSession->update();
     }
@@ -51,6 +46,16 @@ void Heartwave::setCurrentSession(int index)
 
     if (index >= 1 || index <= 3) {
         currentSession = this->sessions[index - 1];
+        currentSession->started = true;
+        currentSession->paused = false;
+        currentSession->ended = true;
+
+        for (int i = 0; i < (int) sessions.size(); i++) {
+            sessions[i]->started = false;
+            sessions[i]->paused = true;
+            sessions[i]->ended = true;
+        }
+
     } else {
         return;
     }
@@ -77,22 +82,27 @@ void Heartwave::setActivePulseReading(bool b)
     this->activePulseReading = b;
 }
 
-
-
-std::string Heartwave::currentLight()
-{
-    if(this->currentSession->getCoheranceRating()<=1){
-        return "red";
-    }
-
-    if(this->currentSession->getCoheranceRating()<=2){
-        return "yellow";
-    }
-
-    if(this->currentSession->getCoheranceRating()<=3){
-        return "green";
-    }
-    return "red";
+void Heartwave::turnOn() {
+    this->on = true;
 }
+void Heartwave::turnOff() {
+    this->on = false;
+}
+
+//std::string Heartwave::currentLight()
+//{
+//    if(this->currentSession->getCoheranceRating()<=1){
+//        return "red";
+//    }
+
+//    if(this->currentSession->getCoheranceRating()<=2){
+//        return "yellow";
+//    }
+
+//    if(this->currentSession->getCoheranceRating()<=3){
+//        return "green";
+//    }
+//    return "red";
+//}
 
 

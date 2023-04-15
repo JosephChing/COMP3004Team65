@@ -18,6 +18,7 @@ public:
     Battery * battery;
     BreathPacer * breathPacer;
 
+    bool on;
     // methods
 
     void update();
@@ -28,7 +29,10 @@ public:
     bool getActivePulseReading();
     void setActivePulseReading(bool b);
 
-    std::string currentLight();
+    void turnOn();
+    void turnOff();
+//    std::string currentLight();
+
 
 private:
     int clock;

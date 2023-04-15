@@ -41,22 +41,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-void MainWindow::initGraph()
-{
-    if(currentGraphSecond == 0){
-        ui->graph->clearGraphs();
-        ui->graph->clearItems();
-    }
-
-    ui->graph->addGraph(0);
-    ui->graph->yAxis->setRange(40,200);
-    ui->graph->xAxis->setRange(0,30);
-    ui->graph->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
-    ui->graph->replot();
-
-}
-
-
 
 //function updates the info of graph each cycle of clock
 //it uses currentGraphSecond global variable to index array
@@ -64,38 +48,49 @@ void MainWindow::updateGraph(){
 
 
 
-    if(currentGraphSecond==0){
-        initGraph();
-    }
+//    if(currentGraphSecond==0){
+//        initGraph();
+//    }
 
-    this->ui->graph->graph(0)->addData(this->heartwave->currentSession->seconds[currentGraphSecond],this->heartwave->currentSession->hrArray[currentGraphSecond]);
-    if(this->heartwave->currentSession->seconds[currentGraphSecond]>15){
-        this->ui->graph->xAxis->setRange(this->heartwave->currentSession->seconds[currentGraphSecond]-15,this->heartwave->currentSession->seconds[currentGraphSecond]+10);
-    }
+//    this->ui->graph->graph(0)->addData(this->heartwave->currentSession->seconds[currentGraphSecond],this->heartwave->currentSession->hrArray[currentGraphSecond]);
+//    if(this->heartwave->currentSession->seconds[currentGraphSecond]>15){
+//        this->ui->graph->xAxis->setRange(this->heartwave->currentSession->seconds[currentGraphSecond]-15,this->heartwave->currentSession->seconds[currentGraphSecond]+10);
+//    }
     //updating the light via checking the coherence array
-    if(this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond]!=0){
+//    if(this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond]!=0){
 
-        this->heartwave->currentSession->setCoheranceRating(this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond]);
-        qInfo()<<this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond];
+//        this->heartwave->currentSession->setCoheranceRating(this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond]);
+//        qInfo()<<this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond];
+//    }
+
+    if(heartwave->currentSession != nullptr) {
+        if(heartwave->currentSession->clock == 0) {
+            initGraph();
+        }
+        if(heartwave->currentSession->paused == false) {
+            ui->graph->graph(0)->addData(heartwave->currentSession->clock, heartwave->currentSession->heartRate);
+        }
+        if(heartwave->currentSession->clock > 15) {
+            ui->graph->xAxis->setRange(this->heartwave->currentSession->clock - 15,this->heartwave->currentSession->clock + 10);
+        }
+
+        this->ui->graph->replot();
+        updateLight();
     }
 
-    this->ui->graph->replot();
-    updateLight();
 
-    if(currentGraphSecond+1 == this->heartwave->currentSession->length){
+//    if(currentGraphSecond+1 == this->heartwave->currentSession->length){
 
-        qInfo()<<"End of array";
-        this->heartwave->setActivePulseReading(false);
-        endOfGraph();
+//        qInfo()<<"End of array";
+//        this->heartwave->setActivePulseReading(false);
+//        endOfGraph();
 
-    }
+//    }
 
-     this->ui->graph->replot();
+//     this->ui->graph->replot();
 
-    currentGraphSecond += 1;
+//    currentGraphSecond += 1;
 }
-
-
 
 void MainWindow::endOfGraph()
 {
@@ -133,34 +128,65 @@ void MainWindow::endOfGraph()
 void MainWindow::updateLight()
 {
 
-
-
-    qInfo()<<"In update Light";
+//    qInfo()<<"In update Light";
     QPixmap  noLight(":/lightsPictures/noLights.png");
     QPixmap  red(":/lightsPictures/redLight.png");
     QPixmap  yellow(":/lightsPictures/yellowLight.png");
     QPixmap  green(":/lightsPictures/greenLight.png");
 
-    if(this->heartwave->currentLight()=="red"){
+    if(heartwave->currentSession == nullptr) {
+        ui->lightPicture->setPixmap(noLight);
+        return;
+    }
+
+
+
+
+    if(heartwave->currentSession->ended) {
+        ui->lightPicture->setPixmap(noLight);
+    }
+
+    if(heartwave->currentSession->coheranceRating <= 1){
         ui->lightPicture->setPixmap(red);
-        qInfo()<<"In update Light red";
+//        qInfo()<<"In update Light red";
         return;
 
     }
-    else if(this->heartwave->currentLight()=="yellow"){
+    else if(heartwave->currentSession->coheranceRating > 1 && heartwave->currentSession->coheranceRating <= 2){
         ui->lightPicture->setPixmap(yellow);
-        qInfo()<<"In update Light yel";
+//        qInfo()<<"In update Light yel";
         return;
     }
-    else if(this->heartwave->currentLight()=="green"){
+    else if(heartwave->currentSession->coheranceRating > 1){
         ui->lightPicture->setPixmap(green);
-        qInfo()<<"In update Light green";
+//        qInfo()<<"In update Light green";
         return;
     }
     else
     {
         ui->lightPicture->setPixmap(noLight);
     }
+
+//    if(this->heartwave->currentLight()=="red"){
+//        ui->lightPicture->setPixmap(red);
+//        qInfo()<<"In update Light red";
+//        return;
+
+//    }
+//    else if(this->heartwave->currentLight()=="yellow"){
+//        ui->lightPicture->setPixmap(yellow);
+//        qInfo()<<"In update Light yel";
+//        return;
+//    }
+//    else if(this->heartwave->currentLight()=="green"){
+//        ui->lightPicture->setPixmap(green);
+//        qInfo()<<"In update Light green";
+//        return;
+//    }
+//    else
+//    {
+//        ui->lightPicture->setPixmap(noLight);
+//    }
 
 }
 
@@ -178,13 +204,24 @@ MainWindow::~MainWindow()
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-//    heartwave->update();
+    if (heartwave != nullptr) {
+        heartwave->update();
+        if ((this->heartwave->getActivePulseReading() == true)){
+            updateGraph();
+        }
 
-    if ((this->heartwave->getActivePulseReading() == true)){
-        updateGraph();
+        // Breath Pacer UI.
+        ui->breathPaceIndicator->setValue(heartwave->breathPacer->currentPosition);
+
+        // Battery UI.
+        if (!heartwave->battery->isLow) {
+            ui->lowBatteryLabel->setVisible(false);
+        } else {
+            ui->lowBatteryLabel->setVisible(true);
+        }
+        ui->batteryLabel->setNum(heartwave->battery->getBatteryLevel());
+
     }
-
-    ui->breathPaceIndicator->setValue(heartwave->breathPacer->currentPosition);
 }
 
 void MainWindow::initializeMainMenu(Menu* m) {
@@ -261,25 +298,22 @@ void MainWindow::navigateSubMenu() {
         currentGraphSecond = 0;
 
         if(masterMenu->getMenuItems()[index] == "START SESSION 1"){
-            this->heartwave->setActivePulseReading(true);
             this->heartwave->setCurrentSession(1);
-            this->heartwave->currentSession->started = true;
+            this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
             ui->graph->setVisible(true);
             qInfo("Session 1"); // GRAPH 1
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 2"){
-            this->heartwave->setActivePulseReading(true);
             this->heartwave->setCurrentSession(2);
-            this->heartwave->currentSession->started = true;
+            this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
             ui->graph->setVisible(true);
             qInfo("Session 2"); // GRAPH 2
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 3"){
-            this->heartwave->setActivePulseReading(true);
             this->heartwave->setCurrentSession(3);
-            this->heartwave->currentSession->started = true;
+            this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
             ui->graph->setVisible(true);
             qInfo("Session 3"); // GRAPH 3
@@ -388,6 +422,29 @@ void MainWindow::navigateToMainMenu() {
     updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
 }
 
+
+void MainWindow::initGraph()
+{
+//    if(currentGraphSecond == 0){
+//        ui->graph->clearGraphs();
+//        ui->graph->clearItems();
+//    }
+    ui->graph->clearGraphs();
+    ui->graph->clearItems();
+//    ui->graph->replot();
+
+    ui->graph->addGraph(0);
+//    ui->graph->graph(0)->data().clear();
+
+    ui->graph->yAxis->setRange(40,200);
+    ui->graph->xAxis->setRange(0,30);
+    ui->graph->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+    ui->graph->replot();
+}
+
+
+
+
 void MainWindow::navigateBack() {
     if(masterMenu->getName() == "MAIN MENU") {
         return;
@@ -410,4 +467,15 @@ void MainWindow::navigateBack() {
     }
     ui->graph->setVisible(false);
     ui->summary->setVisible(false);
+
+//    initGraph();
+
+    qInfo()<< "Clearing graph data";
+//    ui->graph->clearItems();
+//    ui->graph->clearGraphs();
+//    ui->graph->graph(0)->data().data()->clear();
+//    ui->graph->replot();
+//    if (ui->graph->graph(0) != nullptr) {
+
+//    }
 }

@@ -3,9 +3,9 @@
 class BreathPacer {
 public:
   BreathPacer();
-  int clock;
-  int currentPosition;
-  int frequency;
+  double clock;
+  double currentPosition;
+  double frequency;
 
   void update();
   void changeFrequency(int newFrequency);

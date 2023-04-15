@@ -21,6 +21,7 @@ public:
 
     QVector<double> seconds;
 
+    double heartRate;
     double coheranceRating;
     double length;
     bool started;
@@ -32,12 +33,11 @@ public:
 
     // Methods
     void update();
+    void start();
 
     void updateCoheranceRating();
 
     void calculateAchievementScore();
-
-    void setCoheranceRating(double cl);
 
     double getCoheranceRating();
 

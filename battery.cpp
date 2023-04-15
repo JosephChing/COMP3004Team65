@@ -1,15 +1,14 @@
 #include "battery.h"
 #include <iostream>
 
-Battery::Battery() : batteryLevel(100) {}
+Battery::Battery() : batteryLevel(100), isLow(false) {}
 
 void Battery::update() {
     batteryLevel -= 0.2;
-}
-
-void Battery::lowBatteryWarning() const {
     if (batteryLevel <= 20) {
-        std::cout << "Warning: Low battery. Please change your battery." << std::endl;
+        this->isLow = true;
+    } else {
+        this->isLow = false;
     }
 }
 
