@@ -18,18 +18,15 @@ Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(n
     session3->hrArray = {60, 65, 75, 95, 120, 145, 175, 195, 175, 145, 120, 95, 75, 65, 60, 65, 75, 95, 120, 145, 175, 195, 175, 145, 120, 95, 75, 65, 60, 65, 75, 95, 120, 145, 175, 195, 175, 145, 120, 95, 75, 65, 60, 65, 75, 95, 120, 145, 175, 195, 175, 145, 120, 95, 75, 65, 64, 65, 62, 60};
     session3->coheranceLevelArray = {0.5, 0, 0, 0, 0, 0.3, 0, 0, 0, 0, 0.8, 0, 0, 0, 0, 0.1, 0, 0, 0, 0, 0.6, 0, 0, 0, 0, 0.9, 0, 0, 0, 0, 0.4, 0, 0, 0, 0, 0.2, 0, 0, 0, 0, 0.7, 0, 0, 0, 0, 0.3, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.8, 0, 0, 0, 0};
 
-    for(double i = 0; i < session1->hrArray.length() ; i++){
+    for(double i = 0; i < session1->hrArray.length() ; i++) {
       session1->seconds.append(i);
       session2->seconds.append(i);
       session3->seconds.append(i);
     }
 
-    this->currentSession = session1;
-
-
-
-
-
+    this->sessions.push_back(session1);
+    this->sessions.push_back(session2);
+    this->sessions.push_back(session3);
 }
 
 
@@ -43,9 +40,13 @@ void Heartwave::update()
     breathPacer->update();
 }
 
-void Heartwave::setCurrentSession(int)
+void Heartwave::setCurrentSession(int index)
 {
-
+    if (index <1 || index > 3) {
+        currentSession = this->sessions[index - 1];
+    } else {
+        return;
+    }
 }
 
 void Heartwave::resetData()
@@ -56,7 +57,7 @@ void Heartwave::resetData()
 
 void Heartwave::replaceBattery()
 {
-
+    this->battery->setBatteryLevel(100.0);
 }
 
 bool Heartwave::getActivePulseReading()
