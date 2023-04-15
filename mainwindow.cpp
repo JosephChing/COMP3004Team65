@@ -3,20 +3,24 @@
 #include <QTimer>
 #include "mainwindow.h"
 
+int currentGraphSecond = 0;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow), timerID(0)
 {
     ui->setupUi(this);
     killTimer(timerID);
-    ui->widget->setVisible(false);
+    ui->graph->setVisible(false);
 
-    timerID = startTimer(1000);
-
+    this->heartwave = new Heartwave;
+    timerID = startTimer(100);
+    initGraph();
     heartwave = new Heartwave();
     masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
     mainMenu = masterMenu;
     initializeMainMenu(masterMenu);
+
 
     activeQListWidget = ui->mainMenuListView;
     activeQListWidget->addItems(masterMenu->getMenuItems());
@@ -33,20 +37,78 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
+
+
+
+
+void MainWindow::initGraph()
+{
+    ui->graph->addGraph(0);
+    ui->graph->yAxis->setRange(40,90);
+    ui->graph->xAxis->setRange(0,30);
+    ui->graph->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+
+}
+
+
+
+//function updates the info of graph each cycle of clock
+//it uses currentGraphSecond global variable to index array
+void MainWindow::updateGraph(){
+
+    this->ui->graph->graph(0)->addData(this->heartwave->currentSession->seconds[currentGraphSecond],this->heartwave->currentSession->hrArray[currentGraphSecond]);
+    if(this->heartwave->currentSession->seconds[currentGraphSecond]>15){
+        this->ui->graph->xAxis->setRange(this->heartwave->currentSession->seconds[currentGraphSecond]-15,this->heartwave->currentSession->seconds[currentGraphSecond]+10);
+    }
+
+    this->ui->graph->replot();
+
+    if(currentGraphSecond+1 == this->heartwave->currentSession->length){
+
+        qInfo()<<"End of array";
+        this->heartwave->setActivePulseReading(false);
+        endOfGraph();
+    }
+
+     this->ui->graph->replot();
+
+    currentGraphSecond += 1;
+
+    qInfo()<<this->heartwave->currentSession->hrArray.capacity();
+}
+
+
+
+void MainWindow::endOfGraph()
+{
+    this->heartwave->setActivePulseReading(false);
+    currentGraphSecond = 0;
+    ui->graph->clearItems();
+    ui->graph->replot();
+
+}
+
+
+
+
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
 
+
+
+
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-    heartwave->update();
+//    heartwave->update();
 
+    if ((this->heartwave->getActivePulseReading() == true)){
+        updateGraph();
+    }
 
-
-
-    ui->breathPaceIndicator->setValue(heartwave->breathPacer->currentPosition);
+//    ui->breathPaceIndicator->setValue(heartwave->breathPacer->currentPosition);
 }
 
 void MainWindow::initializeMainMenu(Menu* m) {
@@ -59,12 +121,18 @@ void MainWindow::initializeMainMenu(Menu* m) {
     m->addChildMenu(history);
     Menu* pacer = new Menu("BREATH PACER", {"10", "20", "30"}, settings);
     settings->addChildMenu(pacer);
-    Menu* startSession1 = new Menu("START SESSION 1", {"Do something"}, m);
-    Menu* startSession2 = new Menu("START SESSION 2", {}, m);
-    Menu* startSession3 = new Menu("START SESSION 3", {}, m);
+    Menu* startSession1 = new Menu("START SESSION 1", {"Currently running session 1 (click to end)"}, sessions);
+    Menu* startSession2 = new Menu("START SESSION 2", {"Currently running session 2 (click to end)"}, sessions);
+    Menu* startSession3 = new Menu("START SESSION 3", {"Currently running session 3 (click to end)"}, sessions);
+    Menu* endSession1 = new Menu("Currently running session 1 (click to end)", {}, startSession1);
+    Menu* endSession2 = new Menu("Currently running session 2 (click to end)", {}, startSession2);
+    Menu* endSession3 = new Menu("Currently running session 3 (click to end)", {}, startSession3);
     sessions->addChildMenu(startSession1);
     sessions->addChildMenu(startSession2);
     sessions->addChildMenu(startSession3);
+    startSession1->addChildMenu(endSession1);
+    startSession2->addChildMenu(endSession2);
+    startSession3->addChildMenu(endSession3);
     Menu* viewHistory = new Menu("VIEW",{"Something for now"}, history);
     Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
     history->addChildMenu(viewHistory);
@@ -112,16 +180,34 @@ void MainWindow::navigateSubMenu() {
     }
     if(masterMenu->getName() == "SELECT SESSION"){
         if(masterMenu->getMenuItems()[index] == "START SESSION 1"){
+
+            this->heartwave->setActivePulseReading(true);
+            ui->graph->setVisible(true);
             qInfo("Session 1"); // GRAPH 1
-            return;
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 2"){
             qInfo("Session 2"); // GRAPH 2
-            return;
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 3"){
             qInfo("Session 3"); // GRAPH 3
-            return;
+        }
+    }
+
+    if(masterMenu->getName() == "START SESSION 1") {
+
+        if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
+           endOfGraph();
+            qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
+        }
+    }
+    if(masterMenu->getName() == "START SESSION 2") {
+        if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
+            qInfo("This is where end of graph 2 should run"); // end of graph function should run here for graph 2
+        }
+    }
+    else if(masterMenu->getName() == "START SESSION 3") {
+        if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
+            qInfo("This is where end of graph 3 should run"); // end of graph function should run here for graph 3
         }
     }
 
@@ -138,14 +224,18 @@ void MainWindow::navigateSubMenu() {
         }
     }
 
+        //Start of heartwave session
     if (masterMenu->get(index)->getMenuItems().length() > 0) {
         masterMenu = masterMenu->get(index);
         if(masterMenu->getName() == "SELECT SESSION") {
-            /*if(masterMenu->getMenuItems()[index] == "START SESSION 1") {
-                //session 1 stuff
-                qInfo("Session 1");
-                return;
-            }*/
+            //if there is no current session selected
+            if(this->heartwave->currentSession == nullptr){
+                qInfo()<<"no current session";
+            }
+
+//            this->heartwave->setActivePulseReading(true);
+
+
         }
         MainWindow::updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
 
@@ -159,7 +249,6 @@ void MainWindow::navigateSubMenu() {
 }
 
 void MainWindow::navigateToMainMenu() {
-
         if (masterMenu->getParent()->getName() == "SESSIONS") {
             // stop the session get the time, and add to sessions array
         }
@@ -174,7 +263,7 @@ void MainWindow::navigateToMainMenu() {
         masterMenu = masterMenu->getParent();
         updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
     }
-    ui->widget->setVisible(false);
+    ui->graph->setVisible(false);
 
     while (masterMenu->getName() != "MAIN MENU") {
         masterMenu = masterMenu->getParent();
@@ -184,7 +273,6 @@ void MainWindow::navigateToMainMenu() {
 }
 
 void MainWindow::navigateBack() {
-
     ui->rightButton->blockSignals(true);
     ui->leftButton->blockSignals(true);
         if (masterMenu->getParent()->getName() == "START SESSION") {
@@ -201,6 +289,5 @@ void MainWindow::navigateBack() {
         masterMenu = masterMenu->getParent();
         updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
     }
-    ui->widget->setVisible(false);
+    ui->graph->setVisible(false);
 }
-

@@ -8,6 +8,8 @@
 
 #include "heartwave.h"
 #include "menu.h"
+#include "session.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -19,6 +21,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void initGraph();
+    void updateGraph();
+    void endOfGraph();
 
 private:
     Ui::MainWindow *ui;
