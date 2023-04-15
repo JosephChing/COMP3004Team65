@@ -49,7 +49,7 @@ void MainWindow::initGraph()
     }
 
     ui->graph->addGraph(0);
-    ui->graph->yAxis->setRange(40,90);
+    ui->graph->yAxis->setRange(40,200);
     ui->graph->xAxis->setRange(0,30);
     ui->graph->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
     ui->graph->replot();
@@ -218,21 +218,27 @@ void MainWindow::navigateSubMenu() {
 
     if(masterMenu->getName() == "START SESSION 1") {
         endOfGraph();
+        heartwave->setCurrentSession(1);
         if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
-
+           endOfGraph();
             qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
+            heartwave->currentSession->interruptSession();
         }
     }
     if(masterMenu->getName() == "START SESSION 2") {
         endOfGraph();
+        heartwave->setCurrentSession(2);
         if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
             qInfo("This is where end of graph 2 should run"); // end of graph function should run here for graph 2
+            heartwave->currentSession->interruptSession();
         }
     }
     else if(masterMenu->getName() == "START SESSION 3") {
         endOfGraph();
+        heartwave->setCurrentSession(3);
         if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
             qInfo("This is where end of graph 3 should run"); // end of graph function should run here for graph 3
+            heartwave->currentSession->interruptSession();
         }
     }
 
