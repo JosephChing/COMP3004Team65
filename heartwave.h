@@ -12,7 +12,7 @@ class Heartwave
 {
 public:
     Heartwave();
-    std::vector<Session> sessions;
+    std::vector<Session*> sessions;
     Session * currentSession;
 
     Battery * battery;

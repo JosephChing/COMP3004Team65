@@ -465,10 +465,10 @@
    <widget class="QCustomPlot" name="graph" native="true">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>330</y>
+      <x>340</x>
+      <y>210</y>
       <width>221</width>
-      <height>241</height>
+      <height>191</height>
      </rect>
     </property>
    </widget>
