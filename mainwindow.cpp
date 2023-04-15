@@ -16,7 +16,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->summary->setVisible(false);
 
     this->heartwave = new Heartwave;
+<<<<<<< Updated upstream
     timerID = startTimer(300);
+=======
+    timerID = startTimer(200);
+>>>>>>> Stashed changes
     initGraph();
     heartwave = new Heartwave();
     masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
@@ -295,6 +299,7 @@ void MainWindow::navigateSubMenu() {
         }
     }
 
+<<<<<<< Updated upstream
 //    if(masterMenu->getName() == "START SESSION 1") {
 //        this->heartwave->setActivePulseReading(true);
 //        endOfGraph();
@@ -334,6 +339,50 @@ void MainWindow::navigateSubMenu() {
 //    }
 
 
+=======
+    if(masterMenu->getName() == "START SESSION 1") {
+        initGraph();
+        this->heartwave->setActivePulseReading(true);
+//        endOfGraph();
+        heartwave->setCurrentSession(1);
+        if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
+            ui->summary->setPlainText("Summary 1");
+            ui->summary->show();
+            ui->summary->setVisible(true);
+           endOfGraph();
+            qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
+            heartwave->currentSession->interruptSession();
+        }
+    }
+    if(masterMenu->getName() == "START SESSION 2") {
+        initGraph();
+        this->heartwave->setActivePulseReading(true);
+//        endOfGraph();
+        heartwave->setCurrentSession(2);
+        if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
+            ui->summary->setPlainText("Summary 2");
+            ui->summary->show();
+            ui->summary->setVisible(true);
+            endOfGraph();
+            qInfo("This is where end of graph 2 should run"); // end of graph function should run here for graph 2
+            heartwave->currentSession->interruptSession();
+        }
+    }
+    else if(masterMenu->getName() == "START SESSION 3") {
+        initGraph();
+        this->heartwave->setActivePulseReading(true);
+//        endOfGraph();
+        heartwave->setCurrentSession(3);
+        if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
+            ui->summary->setPlainText("Summary 3");
+            ui->summary->show();
+            ui->summary->setVisible(true);
+            qInfo("This is where end of graph 3 should run"); // end of graph function should run here for graph 3
+            heartwave->currentSession->interruptSession();
+            endOfGraph();
+        }
+    }
+>>>>>>> Stashed changes
 
     if (masterMenu->getName() == "CLEAR") {
         if (masterMenu->getMenuItems()[index] == "YES") {
