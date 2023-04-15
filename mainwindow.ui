@@ -17,8 +17,8 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>628</y>
+      <x>40</x>
+      <y>528</y>
       <width>482</width>
       <height>459</height>
      </rect>
@@ -307,10 +307,10 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>59</x>
-      <y>109</y>
-      <width>481</width>
-      <height>71</height>
+      <x>150</x>
+      <y>110</y>
+      <width>311</width>
+      <height>91</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -349,94 +349,23 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Coherance</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="coheranceLabel">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_15">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Length</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lengthLabel">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="QLabel" name="label_17">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Achievement</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="achievementLabel">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QLabel" name="lightPicture">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="lightPictures.qrc">:/lightsPictures/noLights.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="margin">
+        <number>5</number>
+       </property>
+       <property name="indent">
+        <number>-4</number>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QGraphicsView" name="hrContactGraphic">
@@ -465,18 +394,18 @@
    <widget class="QCustomPlot" name="graph" native="true">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>210</y>
+      <x>320</x>
+      <y>230</y>
       <width>221</width>
-      <height>191</height>
+      <height>161</height>
      </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label_14">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>580</y>
+      <x>50</x>
+      <y>480</y>
       <width>91</width>
       <height>17</height>
      </rect>
@@ -491,8 +420,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>600</y>
+      <x>40</x>
+      <y>500</y>
       <width>481</width>
       <height>31</height>
      </rect>
@@ -507,8 +436,8 @@
    <widget class="QListWidget" name="mainMenuListView">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>330</y>
+      <x>40</x>
+      <y>230</y>
       <width>256</width>
       <height>241</height>
      </rect>
@@ -517,8 +446,8 @@
    <widget class="QLabel" name="menuLabel">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>310</y>
+      <x>40</x>
+      <y>210</y>
       <width>121</width>
       <height>17</height>
      </rect>
@@ -540,29 +469,14 @@
      <string>TextLabel</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lightPicture">
+   <widget class="QTextEdit" name="summary">
     <property name="geometry">
      <rect>
-      <x>-10</x>
-      <y>120</y>
-      <width>641</width>
-      <height>261</height>
+      <x>310</x>
+      <y>400</y>
+      <width>231</width>
+      <height>71</height>
      </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap resource="lightPictures.qrc">:/lightsPictures/noLights.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-    <property name="margin">
-     <number>62</number>
-    </property>
-    <property name="indent">
-     <number>-4</number>
     </property>
    </widget>
   </widget>
