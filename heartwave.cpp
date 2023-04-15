@@ -28,6 +28,9 @@ Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(n
 
 
 
+    this->sessions.push_back(session1);
+    this->sessions.push_back(session2);
+    this->sessions.push_back(session3);
 
 
 }
@@ -43,9 +46,14 @@ void Heartwave::update()
     breathPacer->update();
 }
 
-void Heartwave::setCurrentSession(int)
+void Heartwave::setCurrentSession(int index)
 {
 
+    if (index >= 1 || index <= 3) {
+        currentSession = this->sessions[index - 1];
+    } else {
+        return;
+    }
 }
 
 void Heartwave::resetData()
@@ -56,7 +64,7 @@ void Heartwave::resetData()
 
 void Heartwave::replaceBattery()
 {
-
+    this->battery->setBatteryLevel(100.0);
 }
 
 bool Heartwave::getActivePulseReading()
