@@ -193,6 +193,9 @@ void MainWindow::navigateSubMenu() {
     if (masterMenu->getName() == "VIEW") {
         return;
     }
+    if(masterMenu->getName() == "BREATH PACER") {
+        return;
+    }
     if(masterMenu->getName() == "SELECT SESSION"){
         currentGraphSecond = 0;
 
@@ -280,7 +283,6 @@ void MainWindow::navigateSubMenu() {
         }
         MainWindow::updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
 
-
     }
 
     else if (masterMenu->get(index)->getName() == "VIEW") {
@@ -290,7 +292,10 @@ void MainWindow::navigateSubMenu() {
 }
 
 void MainWindow::navigateToMainMenu() {
-        if (masterMenu->getParent()->getName() == "SESSIONS") {
+    if(masterMenu->getName() == "MAIN MENU") {
+        return;
+    }
+    if (masterMenu->getParent()->getName() == "SESSIONS") {
             // stop the session get the time, and add to sessions array
         }
         else {
@@ -315,6 +320,9 @@ void MainWindow::navigateToMainMenu() {
 }
 
 void MainWindow::navigateBack() {
+    if(masterMenu->getName() == "MAIN MENU") {
+        return;
+    }
     ui->rightButton->blockSignals(true);
     ui->leftButton->blockSignals(true);
         if (masterMenu->getParent()->getName() == "START SESSION") {
