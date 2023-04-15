@@ -59,15 +59,15 @@ void MainWindow::updateGraph(){
     //updating the light via checking the coherence array
 //    if(this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond]!=0){
 
-//        this->heartwave->currentSession->setCoheranceRating(this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond]);
-//        qInfo()<<this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond];
+//        this->heartwaveurrentSession->setCoheranceRating(this->heartwave->currentSession->coheranceLevelArray[currentGraphSecond]);
+    //        qInfo()<<this->heart->cwave->currentSession->coheranceLevelArray[currentGraphSecond];
 //    }
 
     if(heartwave->currentSession != nullptr) {
         if(heartwave->currentSession->clock == 0) {
             initGraph();
         }
-        if(heartwave->currentSession->paused == false) {
+        if(heartwave->currentSession->paused == false || heartwave->currentSession->ended == true) {
             ui->graph->graph(0)->addData(heartwave->currentSession->clock, heartwave->currentSession->heartRate);
         }
         if(heartwave->currentSession->clock > 15) {
@@ -298,6 +298,7 @@ void MainWindow::navigateSubMenu() {
         currentGraphSecond = 0;
 
         if(masterMenu->getMenuItems()[index] == "START SESSION 1"){
+            initGraph();
             this->heartwave->setCurrentSession(1);
             this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
@@ -305,13 +306,15 @@ void MainWindow::navigateSubMenu() {
             qInfo("Session 1"); // GRAPH 1
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 2"){
+            initGraph();
             this->heartwave->setCurrentSession(2);
             this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
             ui->graph->setVisible(true);
             qInfo("Session 2"); // GRAPH 2
         }
-        else if (masterMenu->getMenuItems()[index] == "START SESSION 3"){
+        else if (masterMenu->getMenuItems()[index] == "START SESSION 3"){\
+            initGraph();
             this->heartwave->setCurrentSession(3);
             this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
@@ -468,14 +471,14 @@ void MainWindow::navigateBack() {
     ui->graph->setVisible(false);
     ui->summary->setVisible(false);
 
-//    initGraph();
-
     qInfo()<< "Clearing graph data";
-//    ui->graph->clearItems();
-//    ui->graph->clearGraphs();
-//    ui->graph->graph(0)->data().data()->clear();
-//    ui->graph->replot();
-//    if (ui->graph->graph(0) != nullptr) {
 
-//    }
+    heartwave->currentSession->stop();
+
+    initGraph();
+}
+
+void MainWindow::on_batteryReplaceButton_clicked()
+{
+    this->heartwave->replaceBattery();
 }

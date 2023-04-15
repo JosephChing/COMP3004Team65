@@ -5,6 +5,7 @@
 #include <ctime>
 #include <string>
 #include <QVector>
+#include <iostream>
 #include <sstream>
 
 class Session {
@@ -34,6 +35,7 @@ public:
     // Methods
     void update();
     void start();
+    void stop();
 
     void updateCoheranceRating();
 

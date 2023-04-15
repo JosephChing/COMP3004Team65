@@ -7,7 +7,7 @@ Session::Session(int id)
 }
 
 void Session::update() {
-//    std::cout<<
+    std::cout<< "Clock= " << this->clock << std::endl;
     if (!paused && started && !ended) {
         this->heartRate = hrArray[clock];
         this->updateCoheranceRating();
@@ -24,6 +24,10 @@ void Session::start() {
     started = true;
     ended = false;
     clock = 0;
+}
+
+void Session::stop() {
+    ended = true;
 }
 
 void Session::updateCoheranceRating() {

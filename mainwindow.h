@@ -44,5 +44,6 @@ private slots:
     void navigateSubMenu();
     void navigateToMainMenu();
     void navigateBack();
+    void on_batteryReplaceButton_clicked();
 };
 #endif // MAINWINDOW_H

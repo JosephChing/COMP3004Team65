@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>610</width>
+    <width>1519</width>
     <height>1067</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>40</x>
       <y>528</y>
-      <width>482</width>
+      <width>561</width>
       <height>459</height>
      </rect>
     </property>
@@ -277,10 +277,10 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>100</y>
-      <width>381</width>
-      <height>71</height>
+      <x>30</x>
+      <y>80</y>
+      <width>571</width>
+      <height>121</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -342,9 +342,9 @@
    <widget class="QCustomPlot" name="graph" native="true">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>300</x>
       <y>230</y>
-      <width>221</width>
+      <width>301</width>
       <height>161</height>
      </rect>
     </property>
@@ -370,7 +370,7 @@
      <rect>
       <x>40</x>
       <y>500</y>
-      <width>481</width>
+      <width>561</width>
       <height>31</height>
      </rect>
     </property>
@@ -407,9 +407,9 @@
    <widget class="QTextEdit" name="summary">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>300</x>
       <y>400</y>
-      <width>231</width>
+      <width>301</width>
       <height>71</height>
      </rect>
     </property>
@@ -482,13 +482,34 @@
      <string>Replace Battery</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>10</y>
+      <width>231</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Noto Serif Dogra</family>
+      <pointsize>24</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Team 65</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>610</width>
+     <width>1519</width>
      <height>22</height>
     </rect>
    </property>
