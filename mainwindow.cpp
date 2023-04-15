@@ -107,6 +107,26 @@ void MainWindow::endOfGraph()
     ui->graph->replot();
     QPixmap  noLight(":/lightsPictures/noLights.png");
     ui->lightPicture->setPixmap(noLight);
+    /*if(m->getMenuItems()[index] == "Currently running session 1 (click to end)") {
+        ui->summary->setPlainText("Summary 1");
+       endOfGraph();
+        qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
+        heartwave->currentSession->interruptSession();
+    }
+    if(m->getMenuItems()[index] == "Currently running session 2 (click to end)") {
+        ui->summary->setPlainText("Summary 2");
+       endOfGraph();
+        qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
+        heartwave->currentSession->interruptSession();
+    }
+    if(m->getMenuItems()[index] == "Currently running session 3 (click to end)") {
+        ui->summary->setPlainText("Summary 3");
+       endOfGraph();
+        qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
+        heartwave->currentSession->interruptSession();
+    }
+    ui->summary->show();
+    ui->summary->setVisible(true);*/
 
 }
 
