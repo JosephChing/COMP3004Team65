@@ -1,6 +1,6 @@
 #include "heartwave.h"
 
-Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(nullptr), */battery(new Battery()), breathPacer(new BreathPacer())
+Heartwave::Heartwave() : clock(0), activePulseReading(true), /*currentSession(nullptr), */battery(new Battery()), breathPacer(new BreathPacer())
 {
 
 
