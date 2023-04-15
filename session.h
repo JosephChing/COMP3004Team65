@@ -47,7 +47,7 @@ public:
 
     double getCoheranceRating();
 
-    void generateSummary();
+    std::string generateSummary();
 
     int getSessionLength();
 

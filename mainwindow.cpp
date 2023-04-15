@@ -16,11 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->summary->setVisible(false);
 
     this->heartwave = new Heartwave;
-<<<<<<< Updated upstream
+
     timerID = startTimer(300);
-=======
-    timerID = startTimer(200);
->>>>>>> Stashed changes
+
     initGraph();
     heartwave = new Heartwave();
     masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
@@ -299,7 +297,7 @@ void MainWindow::navigateSubMenu() {
         }
     }
 
-<<<<<<< Updated upstream
+
 //    if(masterMenu->getName() == "START SESSION 1") {
 //        this->heartwave->setActivePulseReading(true);
 //        endOfGraph();
@@ -339,7 +337,7 @@ void MainWindow::navigateSubMenu() {
 //    }
 
 
-=======
+
     if(masterMenu->getName() == "START SESSION 1") {
         initGraph();
         this->heartwave->setActivePulseReading(true);
@@ -382,7 +380,7 @@ void MainWindow::navigateSubMenu() {
             endOfGraph();
         }
     }
->>>>>>> Stashed changes
+
 
     if (masterMenu->getName() == "CLEAR") {
         if (masterMenu->getMenuItems()[index] == "YES") {
