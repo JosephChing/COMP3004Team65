@@ -5,10 +5,8 @@ class Battery {
 public:
     Battery();
 
+    bool isLow;
     void update();
-
-    void lowBatteryWarning() const;
-
     double getBatteryLevel() const;
 
     void setBatteryLevel(double level);
