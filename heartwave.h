@@ -7,14 +7,15 @@
 
 #include "battery.h"
 #include "breathpacer.h"
-
+#include <string>
 class Heartwave
 {
 public:
     Heartwave();
     std::vector<Session*> sessions;
     Session * currentSession;
-    QStringList summaryArray;
+    QString summaryArray;
+//    std::vector<QString> sessionSummaryRecords;
     Battery * battery;
     BreathPacer * breathPacer;
 

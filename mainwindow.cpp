@@ -163,13 +163,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
         if(heartwave->currentSession != nullptr) {
             if(heartwave->currentSession->ended && heartwave->getActivePulseReading() == true) {
                 ui->summary->setVisible(true);
-                //ui->summary->setPlainText(QString::fromStdString(heartwave->currentSession->generateSummary()));
                 ui->summary->setPlainText(heartwave->currentSession->generateSummary());
-                heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
-                //temp.append(heartwave->currentSession->generateSummary());
-                //ui->summaryarray->setPlainText(temp);
-                qInfo("How many times does this run");
-
             } else {
                 ui->summary->setVisible(false);
             }
@@ -214,9 +208,9 @@ void MainWindow::initializeMainMenu(Menu* m) {
     startSession1->addChildMenu(endSession1);
     startSession2->addChildMenu(endSession2);
     startSession3->addChildMenu(endSession3);
-    Menu* viewHistory = new Menu("VIEW",heartwave->summaryArray, history);
+//    Menu* viewHistory = new Menu("VIEW", heartwave->summaryArray, history);
     Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
-    history->addChildMenu(viewHistory);
+//    history->addChildMenu(viewHistory);
     history->addChildMenu(clearHistory);
 
 
@@ -298,29 +292,40 @@ void MainWindow::navigateSubMenu() {
         this->heartwave->setActivePulseReading(true);
         heartwave->setCurrentSession(1);
         if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
+            heartwave->currentSession->stop();
             heartwave->currentSession->interruptSession();
+
+            ui->summaryarray->setText(ui->summaryarray->toPlainText() += "------------------\n");
+            ui->summaryarray->setText(ui->summaryarray->toPlainText() += heartwave->currentSession->generateSummary());
         }
     }
     else if(masterMenu->getName() == "START SESSION 2") {
         this->heartwave->setActivePulseReading(true);
         heartwave->setCurrentSession(2);
         if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
+            heartwave->currentSession->stop();
             heartwave->currentSession->interruptSession();
+
+            ui->summaryarray->setText(ui->summaryarray->toPlainText() += "------------------\n");
+            ui->summaryarray->setText(ui->summaryarray->toPlainText() += heartwave->currentSession->generateSummary());
         }
     }
     else if(masterMenu->getName() == "START SESSION 3") {
         this->heartwave->setActivePulseReading(true);
         heartwave->setCurrentSession(3);
         if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
+            heartwave->currentSession->stop();
             heartwave->currentSession->interruptSession();
+
+            ui->summaryarray->setText(ui->summaryarray->toPlainText() += "------------------\n");
+            ui->summaryarray->setText(ui->summaryarray->toPlainText() += heartwave->currentSession->generateSummary());
         }
     }
 
 
     if (masterMenu->getName() == "CLEAR") {
         if (masterMenu->getMenuItems()[index] == "YES") {
-            //delete sessions array
-            qInfo("YEES");
+            ui->summaryarray->setText("");
             return;
         }
         else {
@@ -428,6 +433,18 @@ void MainWindow::navigateBack() {
 
     heartwave->currentSession->stop();
 
+
+    // Add session summary if it exists
+//    if(heartwave->currentSession != nullptr) {
+//        if (heartwave->currentSession->ended == true ) {
+//            if(heartwave->currentSession->generateSummary() != "") {
+//                heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
+//                qInfo() << "Appending: " << heartwave->currentSession->generateSummary();
+//            }
+//        }
+////        heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
+////        qInfo() << "Appending: " << heartwave->currentSession->generateSummary();
+//    }
     initGraph();
 }
 
