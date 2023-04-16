@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow), timerID(0), power(false)
 {
-
     ui->setupUi(this);
     killTimer(timerID);
 
@@ -167,6 +166,9 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 //ui->summary->setPlainText(QString::fromStdString(heartwave->currentSession->generateSummary()));
                 ui->summary->setPlainText(heartwave->currentSession->generateSummary());
                 heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
+                //temp.append(heartwave->currentSession->generateSummary());
+                //ui->summaryarray->setPlainText(temp);
+                qInfo("How many times does this run");
 
             } else {
                 ui->summary->setVisible(false);

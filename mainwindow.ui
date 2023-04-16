@@ -320,7 +320,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="lightPictures.qrc">:/lightsPictures/noLights.png</pixmap>
+        <pixmap>:/lightsPictures/noLights.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -345,7 +345,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="lightPictures.qrc">:/lightsPictures/greyHeart.png</pixmap>
+        <pixmap>:/lightsPictures/greyHeart.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -1457,6 +1457,16 @@
      </item>
     </layout>
    </widget>
+   <widget class="QTextEdit" name="summaryarray">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>90</y>
+      <width>351</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -1478,8 +1488,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="lightPictures.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
