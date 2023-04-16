@@ -52,12 +52,16 @@ double Session::getCoheranceRating()
 
 
 
-std::string Session::generateSummary() {
-    std::stringstream summary;
-    summary << "Session ID: " << sessionID << '\n'
-            << "Session Length: " << clock << '\n'
-            << "Achievement Score: " << achievementScore << '\n';
-    return summary.str();
+QString Session::generateSummary() {
+    QString summary;
+    summary.append("Session ID: ");
+    summary.append(QString::number(sessionID));
+    summary.append("\nSession Length: ");
+    summary.append(QString::number(clock));
+    summary.append("\nAchievement Score: ");
+    summary.append(QString::number(achievementScore));
+    summary.append("\n");
+    return summary;
 }
 
 int Session::getSessionLength() {

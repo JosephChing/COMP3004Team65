@@ -14,7 +14,7 @@ public:
     Heartwave();
     std::vector<Session*> sessions;
     Session * currentSession;
-
+    QStringList summaryArray;
     Battery * battery;
     BreathPacer * breathPacer;
 

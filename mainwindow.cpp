@@ -206,7 +206,9 @@ void MainWindow::timerEvent(QTimerEvent *event)
         if(heartwave->currentSession != nullptr) {
             if(heartwave->currentSession->ended && heartwave->getActivePulseReading() == true) {
                 ui->summary->setVisible(true);
-                ui->summary->setPlainText(QString::fromStdString(heartwave->currentSession->generateSummary()));
+                //ui->summary->setPlainText(QString::fromStdString(heartwave->currentSession->generateSummary()));
+                ui->summary->setPlainText(heartwave->currentSession->generateSummary());
+                heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
 
             } else {
                 ui->summary->setVisible(false);
@@ -240,7 +242,7 @@ void MainWindow::initializeMainMenu(Menu* m) {
     startSession1->addChildMenu(endSession1);
     startSession2->addChildMenu(endSession2);
     startSession3->addChildMenu(endSession3);
-    Menu* viewHistory = new Menu("VIEW",{"Something for now"}, history);
+    Menu* viewHistory = new Menu("VIEW",heartwave->summaryArray, history);
     Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
     history->addChildMenu(viewHistory);
     history->addChildMenu(clearHistory);
