@@ -62,6 +62,7 @@ QString Session::generateSummary() {
     summary.append(QString::number(achievementScore));
     summary.append("\n");
     return summary;
+
 }
 
 int Session::getSessionLength() {
