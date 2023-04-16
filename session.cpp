@@ -8,7 +8,7 @@ Session::Session(int id)
 }
 
 void Session::update() {
-    std::cout<< "Clock= " << this->clock << std::endl;
+    //std::cout<< "Clock= " << this->clock << std::endl;
 
     if (!paused && started && !ended) {
         this->heartRate = hrArray[clock];
@@ -18,8 +18,6 @@ void Session::update() {
             ended = true;
             generateSummary();
             coheranceRating = 0;
-
-
         }
     }
 
@@ -57,7 +55,7 @@ double Session::getCoheranceRating()
 std::string Session::generateSummary() {
     std::stringstream summary;
     summary << "Session ID: " << sessionID << '\n'
-            << "Session Length: " << length << '\n'
+            << "Session Length: " << clock << '\n'
             << "Achievement Score: " << achievementScore << '\n';
     return summary.str();
 }
