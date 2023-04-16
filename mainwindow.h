@@ -5,7 +5,7 @@
 #include <QListWidget>
 #include <QTimerEvent>
 #include <QVector>
-
+#include <unistd.h>
 #include "heartwave.h"
 #include "menu.h"
 #include "session.h"
@@ -25,10 +25,15 @@ public:
     void updateGraph();
     void endOfGraph();
     void updateLight();
+    void initDevice();
+    void shutOffDevice();
+
 
 private:
+
     Ui::MainWindow *ui;
     int timerID;
+    bool power;
     Heartwave * heartwave;
     Menu* masterMenu;
     Menu* mainMenu;
@@ -46,5 +51,6 @@ private slots:
     void navigateBack();
     void on_batteryReplaceButton_clicked();
     void on_breathPaceComboBox_currentIndexChanged(int index);
+    void on_offButton_clicked();
 };
 #endif // MAINWINDOW_H
