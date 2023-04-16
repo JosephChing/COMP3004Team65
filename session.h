@@ -29,7 +29,7 @@ public:
     bool started;
     bool ended;
     bool paused;
-    std::string summary;
+    QString summary;
 
 
 
@@ -47,7 +47,7 @@ public:
 
     double getCoheranceRating();
 
-    std::string generateSummary();
+    QString generateSummary();
 
     int getSessionLength();
 
