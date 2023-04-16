@@ -2,7 +2,6 @@
 
 Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(nullptr), */battery(new Battery()), on(false), breathPacer(new BreathPacer())
 {
-    QStringList summaryArray;
 
     Session* session1 = new Session(1);
     Session* session2 = new Session(2);
