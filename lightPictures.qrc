@@ -4,5 +4,7 @@
         <file>lightsPictures/noLights.png</file>
         <file>lightsPictures/redLight.png</file>
         <file>lightsPictures/yellowLight.png</file>
+        <file>lightsPictures/greyHeart.png</file>
+        <file>lightsPictures/redHeart.png</file>
     </qresource>
 </RCC>

@@ -52,5 +52,7 @@ private slots:
     void on_batteryReplaceButton_clicked();
     void on_breathPaceComboBox_currentIndexChanged(int index);
     void on_offButton_clicked();
+    void on_disconnectButton_clicked();
+    void on_reconnectButton_clicked();
 };
 #endif // MAINWINDOW_H

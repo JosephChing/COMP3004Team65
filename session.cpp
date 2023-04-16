@@ -55,7 +55,7 @@ double Session::getCoheranceRating()
 std::string Session::generateSummary() {
     std::stringstream summary;
     summary << "Session ID: " << sessionID << '\n'
-            << "Session Length: " << clock << '\n'
+            << "Session Length: " << clock << '\n' << "Average Coherance Score: " << achievementScore / ((double) clock / 5.0) << '\n'
             << "Achievement Score: " << achievementScore << '\n';
     return summary.str();
 }
