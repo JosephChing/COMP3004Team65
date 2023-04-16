@@ -18,42 +18,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->heartwave = new Heartwave;
 
-//    timerID = startTimer(10);
-
     initGraph();
     heartwave = new Heartwave();
     ui->mainMenuListView->setStyleSheet("background-color: black");
-
-//    masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
-//    mainMenu = masterMenu;
-//    initializeMainMenu(masterMenu);
-
-
-//    activeQListWidget = ui->mainMenuListView;
-//    activeQListWidget->addItems(masterMenu->getMenuItems());
-//    activeQListWidget->setCurrentRow(0);
-//    ui->menuLabel->setText(masterMenu->getName());
     ui->breathPaceComboBox->setVisible(false);
-
-//    connect(ui->upButton, &QPushButton::pressed, this, &MainWindow::navigateUpMenu);
-//    connect(ui->downButton, &QPushButton::pressed, this, &MainWindow::navigateDownMenu);
-//    connect(ui->selectButton, &QPushButton::pressed, this, &MainWindow::navigateSubMenu);
-//    connect(ui->menuButton, &QPushButton::pressed, this, &MainWindow::navigateToMainMenu);
-//    connect(ui->returnButton, &QPushButton::pressed, this, &MainWindow::navigateBack);
 }
-
-
-
-
-
-
-
-
 
 //function updates the info of graph each cycle of clock
 //it uses currentGraphSecond global variable to index array
 void MainWindow::updateGraph(){
-
     if(heartwave->currentSession != nullptr) {
         if(heartwave->currentSession->clock == 0) {
             initGraph();
@@ -64,7 +37,6 @@ void MainWindow::updateGraph(){
         if(heartwave->currentSession->clock > 15) {
             ui->graph->xAxis->setRange(this->heartwave->currentSession->clock - 15,this->heartwave->currentSession->clock + 10);
         }
-
         this->ui->graph->replot();
         updateLight();
     }
@@ -74,12 +46,8 @@ void MainWindow::endOfGraph()
 {
     currentGraphSecond = 0;
     this->heartwave->setActivePulseReading(false);
-
-//    ui->graph->graph(0)->
-
     ui->graph->replot();
     QPixmap  noLight(":/lightsPictures/noLights.png");
-
 }
 
 
@@ -94,9 +62,6 @@ void MainWindow::updateLight()
         ui->lightPicture->setPixmap(noLight);
         return;
     }
-
-
-
 
     if(heartwave->currentSession->ended) {
         ui->lightPicture->setPixmap(noLight);
@@ -148,21 +113,14 @@ void MainWindow::initDevice()
     connect(ui->returnButton, &QPushButton::pressed, this, &MainWindow::navigateBack);
 
 
+    heartwave->setActivePulseReading(false);
+
 }
-
-
-
-
-
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
-
-
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
@@ -211,6 +169,18 @@ void MainWindow::timerEvent(QTimerEvent *event)
             } else {
                 ui->summary->setVisible(false);
             }
+
+
+        }
+
+
+        if(heartwave->getActivePulseReading()) {
+            // Heartwave monitor connected UI.
+            QPixmap  red(":/lightsPictures/redHeart.png");
+            ui->monitorPicture->setPixmap(red);
+        } else {
+            QPixmap  grey(":/lightsPictures/greyHeart.png");
+            ui->monitorPicture->setPixmap(grey);
         }
 
     }
@@ -494,3 +464,14 @@ void MainWindow::shutOffDevice()
 
 //    ui->mainMenuListView->setStyleSheet("font: black");
 }
+
+void MainWindow::on_disconnectButton_clicked()
+{
+    heartwave->setActivePulseReading(false);
+}
+
+void MainWindow::on_reconnectButton_clicked()
+{
+    heartwave->setActivePulseReading(true);
+}
+

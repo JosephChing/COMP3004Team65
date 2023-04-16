@@ -2,8 +2,6 @@
 
 Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(nullptr), */battery(new Battery()), on(false), breathPacer(new BreathPacer())
 {
-
-
     Session* session1 = new Session(1);
     Session* session2 = new Session(2);
     Session* session3 = new Session(3);
@@ -31,19 +29,17 @@ Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(n
     this->sessions.push_back(session3);
 }
 
-
 void Heartwave::update()
 {
     if (currentSession != nullptr ) {
-        currentSession->update();
-
-        if(currentSession->started && !currentSession->ended && !currentSession->paused) {
+        if (activePulseReading) {
+            currentSession->update();
+        }
+        if(currentSession->started && !currentSession->ended && !currentSession->paused && activePulseReading) {
              breathPacer->update();
         }
     }
     battery->update();
-
-
 }
 
 void Heartwave::setCurrentSession(int index)
@@ -94,21 +90,5 @@ void Heartwave::turnOn() {
 void Heartwave::turnOff() {
     this->on = false;
 }
-
-//std::string Heartwave::currentLight()
-//{
-//    if(this->currentSession->getCoheranceRating()<=1){
-//        return "red";
-//    }
-
-//    if(this->currentSession->getCoheranceRating()<=2){
-//        return "yellow";
-//    }
-
-//    if(this->currentSession->getCoheranceRating()<=3){
-//        return "green";
-//    }
-//    return "red";
-//}
 
 
