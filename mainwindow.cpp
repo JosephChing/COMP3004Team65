@@ -79,27 +79,6 @@ void MainWindow::endOfGraph()
 
     ui->graph->replot();
     QPixmap  noLight(":/lightsPictures/noLights.png");
-    ui->lightPicture->setPixmap(noLight);
-    /*if(m->getMenuItems()[index] == "Currently running session 1 (click to end)") {
-        ui->summary->setPlainText("Summary 1");
-       endOfGraph();
-        qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
-        heartwave->currentSession->interruptSession();
-    }
-    if(m->getMenuItems()[index] == "Currently running session 2 (click to end)") {
-        ui->summary->setPlainText("Summary 2");
-       endOfGraph();
-        qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
-        heartwave->currentSession->interruptSession();
-    }
-    if(m->getMenuItems()[index] == "Currently running session 3 (click to end)") {
-        ui->summary->setPlainText("Summary 3");
-       endOfGraph();
-        qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
-        heartwave->currentSession->interruptSession();
-    }
-    ui->summary->show();
-    ui->summary->setVisible(true);*/
 
 }
 
@@ -322,7 +301,6 @@ void MainWindow::navigateSubMenu() {
             this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
             ui->graph->setVisible(true);
-            qInfo("Session 1"); // GRAPH 1
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 2"){
             initGraph();
@@ -331,7 +309,6 @@ void MainWindow::navigateSubMenu() {
             this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
             ui->graph->setVisible(true);
-            qInfo("Session 2"); // GRAPH 2
         }
         else if (masterMenu->getMenuItems()[index] == "START SESSION 3"){\
             initGraph();
@@ -340,91 +317,28 @@ void MainWindow::navigateSubMenu() {
             this->heartwave->currentSession->start();
             this->heartwave->setActivePulseReading(true);
             ui->graph->setVisible(true);
-            qInfo("Session 3"); // GRAPH 3
         }
     }
 
-
-//    if(masterMenu->getName() == "START SESSION 1") {
-//        this->heartwave->setActivePulseReading(true);
-//        endOfGraph();
-//        heartwave->setCurrentSession(1);
-//        if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
-//            ui->summary->setPlainText("Summary 1");
-//            ui->summary->show();
-//            ui->summary->setVisible(true);
-//           endOfGraph();
-//            qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
-//            heartwave->currentSession->interruptSession();
-//        }
-//    }
-//    if(masterMenu->getName() == "START SESSION 2") {
-//        this->heartwave->setActivePulseReading(true);
-//        endOfGraph();
-//        heartwave->setCurrentSession(2);
-//        if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
-//            ui->summary->setPlainText("Summary 2");
-//            ui->summary->show();
-//            ui->summary->setVisible(true);
-//            qInfo("This is where end of graph 2 should run"); // end of graph function should run here for graph 2
-//            heartwave->currentSession->interruptSession();
-//        }
-//    }
-//    else if(masterMenu->getName() == "START SESSION 3") {
-//        this->heartwave->setActivePulseReading(true);
-//        endOfGraph();
-//        heartwave->setCurrentSession(3);
-//        if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
-//            ui->summary->setPlainText("Summary 3");
-//            ui->summary->show();
-//            ui->summary->setVisible(true);
-//            qInfo("This is where end of graph 3 should run"); // end of graph function should run here for graph 3
-//            heartwave->currentSession->interruptSession();
-//        }
-//    }
-
-
-
     if(masterMenu->getName() == "START SESSION 1") {
-        initGraph();
         this->heartwave->setActivePulseReading(true);
-//        endOfGraph();
         heartwave->setCurrentSession(1);
         if(masterMenu->getMenuItems()[index] == "Currently running session 1 (click to end)") {
-            ui->summary->setPlainText("Summary 1");
-            ui->summary->show();
-            ui->summary->setVisible(true);
-           endOfGraph();
-            qInfo("This is where end of graph 1 should run"); // end of graph function should run here for graph 1
             heartwave->currentSession->interruptSession();
         }
     }
-    if(masterMenu->getName() == "START SESSION 2") {
-        initGraph();
+    else if(masterMenu->getName() == "START SESSION 2") {
         this->heartwave->setActivePulseReading(true);
-//        endOfGraph();
         heartwave->setCurrentSession(2);
         if(masterMenu->getMenuItems()[index] == "Currently running session 2 (click to end)") {
-            ui->summary->setPlainText("Summary 2");
-            ui->summary->show();
-            ui->summary->setVisible(true);
-            endOfGraph();
-            qInfo("This is where end of graph 2 should run"); // end of graph function should run here for graph 2
             heartwave->currentSession->interruptSession();
         }
     }
     else if(masterMenu->getName() == "START SESSION 3") {
-        initGraph();
         this->heartwave->setActivePulseReading(true);
-//        endOfGraph();
         heartwave->setCurrentSession(3);
         if(masterMenu->getMenuItems()[index] == "Currently running session 3 (click to end)") {
-            ui->summary->setPlainText("Summary 3");
-            ui->summary->show();
-            ui->summary->setVisible(true);
-            qInfo("This is where end of graph 3 should run"); // end of graph function should run here for graph 3
             heartwave->currentSession->interruptSession();
-            endOfGraph();
         }
     }
 
@@ -466,6 +380,7 @@ void MainWindow::navigateSubMenu() {
 }
 
 void MainWindow::navigateToMainMenu() {
+    ui->breathPaceComboBox->setVisible(false);
     if(masterMenu->getName() == "MAIN MENU") {
         return;
     }
@@ -496,6 +411,7 @@ void MainWindow::navigateToMainMenu() {
 
 void MainWindow::initGraph()
 {
+    qInfo("initgraph running");
     ui->graph->clearGraphs();
     ui->graph->clearItems();
     ui->graph->addGraph(0);
@@ -571,7 +487,6 @@ void MainWindow::on_offButton_clicked()
 void MainWindow::shutOffDevice()
 {
     this->killTimer(timerID);
-
     ui->mainMenuListView->setStyleSheet("background-color: black");
     ui->summary->setStyleSheet("background-color: black");
 
