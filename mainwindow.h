@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QApplication>
 #include <QListWidget>
 #include <QTimerEvent>
 #include <QVector>
@@ -21,12 +22,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void initGraph();
-    void updateGraph();
-    void endOfGraph();
-    void updateLight();
-    void turnOnDevice();
-    void shutOffDevice();
+
 
 
 private:
@@ -39,7 +35,17 @@ private:
     Menu* mainMenu;
     QListWidget *activeQListWidget;
     void updateMenu(const QString, const QStringList);
-    void initializeMainMenu(Menu*);
+    void initializeInterface(Menu*);
+    void updateLight();
+    void updateBeep();
+
+    void initGraph();
+    void updateGraph();
+    void endOfGraph();
+    void turnOnDevice();
+    void shutOffDevice();
+    double prevCoheranceLevel;
+    bool needPlayBeep;
 
 protected:
     void timerEvent(QTimerEvent *event);

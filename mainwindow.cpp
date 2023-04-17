@@ -7,7 +7,7 @@ int currentGraphSecond = 0;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), timerID(0), power(false)
+    , ui(new Ui::MainWindow), timerID(0), power(false),prevCoheranceLevel(-1), needPlayBeep(false)
 {
     ui->setupUi(this);
 
@@ -182,6 +182,8 @@ void MainWindow::updateLight()
     {
         ui->lightPicture->setPixmap(noLight);
     }
+
+
 }
 
 
@@ -193,9 +195,23 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::updateBeep() {
+    if(heartwave->currentSession->getCoheranceRating() != prevCoheranceLevel) {
+        needPlayBeep = true;
+        prevCoheranceLevel = heartwave->currentSession->getCoheranceRating();
+    }
+    if (needPlayBeep) {
+        QApplication::beep();
+        qInfo() << "Beep! New coherance level: " << heartwave->currentSession->getCoheranceRating();
+        needPlayBeep = false;
+    }
+
+}
 void MainWindow::timerEvent(QTimerEvent *event)
 {
     updateLight();
+    updateBeep();
+
     if(heartwave->battery->getBatteryLevel()<=0){
         shutOffDevice();
         ui->batteryLabel->setText("0");
