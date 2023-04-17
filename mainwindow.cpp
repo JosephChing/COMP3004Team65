@@ -318,6 +318,7 @@ void MainWindow::navigateSubMenu() {
     if (masterMenu->getMenuItems()[index] == "VIEW") {
         ui->summaryarray->setVisible(true);
         qInfo()<<"hello";
+        return;
     }
 
 
@@ -395,16 +396,17 @@ void MainWindow::navigateSubMenu() {
 
     //allows user to go into clear menu, and decide if they want to clear the session history if user desires
     if (masterMenu->getName() == "CLEAR") {
-        if (masterMenu->getMenuItems()[index] == "YES") {
-            ui->summaryarray->setText("");
+        ui->summaryarray->setText("");
+        //        if (masterMenu->getMenuItems()[index] == "YES") {
+//            ui->summaryarray->setText("");
+//            return;
+//        }
+//        else {
+//            navigateBack();
             return;
-        }
-        else {
-            navigateBack();
-            return;
+   }
 
-        }
-    }
+
     //start heartwave session
     if (masterMenu->get(index)->getMenuItems().length() > 0) {
         masterMenu = masterMenu->get(index);
