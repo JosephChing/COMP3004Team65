@@ -317,7 +317,6 @@ void MainWindow::navigateSubMenu() {
     int index = activeQListWidget->currentRow();
     if (masterMenu->getMenuItems()[index] == "VIEW") {
         ui->summaryarray->setVisible(true);
-        qInfo()<<"hello";
         return;
     }
 
@@ -397,12 +396,6 @@ void MainWindow::navigateSubMenu() {
     //allows user to go into clear menu, and decide if they want to clear the session history if user desires
     if (masterMenu->getName() == "CLEAR") {
         ui->summaryarray->setText("");
-        //        if (masterMenu->getMenuItems()[index] == "YES") {
-//            ui->summaryarray->setText("");
-//            return;
-//        }
-//        else {
-//            navigateBack();
             return;
    }
 
@@ -419,7 +412,6 @@ void MainWindow::navigateSubMenu() {
     else if (masterMenu->get(index)->getName() == "VIEW") {
         masterMenu = masterMenu->get(index);
         ui->summaryarray->setVisible(true);
-        //MainWindow::updateMenu("LOG/HISTORY", sessionsArray); -> this lists the sessions array
     }
 }
 //this function allows the user to get back to the main menu from whichever menu they are currently in2
@@ -481,8 +473,6 @@ void MainWindow::navigateBack() {
     }
     ui->graph->setVisible(false);
     ui->summary->setVisible(false);
-
-    qInfo()<< "Clearing graph data";
 
     heartwave->setActivePulseReading(false);
 
