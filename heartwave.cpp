@@ -7,7 +7,7 @@ Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(n
     Session* session2 = new Session(2);
     Session* session3 = new Session(3);
 
-
+    //adding the three sessions
     session1->hrArray = {60, 65, 75, 95, 120, 145, 175, 195, 175, 145, 120, 95, 75, 65, 60, 65, 75, 95, 120, 145, 175, 195, 175, 145, 120, 95, 75, 65, 60, 65, 75, 95, 120, 145, 175, 195, 175, 145, 120, 95, 75, 65, 60, 65, 75, 95, 120, 145, 175, 195, 175, 145, 120, 95, 75, 65, 64, 65, 62, 60};
     session1->coheranceLevelArray = {1.9, 0, 0, 0, 0, 2.9, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2.4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 2.1, 0, 0, 0, 0, 6, 0, 0, 0, 0, 3.9, 0, 0, 0, 0, 8.3, 0, 0, 0, 0, 10, 0, 0, 0, 0, 12, 0, 0, 0, 0, 5.4, 0, 0, 0, 0};
 
@@ -30,8 +30,10 @@ Heartwave::Heartwave() : clock(0), activePulseReading(false), /*currentSession(n
     this->sessions.push_back(session3);
 }
 
+//update the currentSession and breathPacer while there is an active pulse reading
 void Heartwave::update()
 {
+
     if (currentSession != nullptr ) {
         if (activePulseReading) {
             currentSession->update();
