@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->graph->setVisible(false);
     ui->summary->setVisible(false);
-
+    ui->summaryarray->setVisible(false);
     this->heartwave = new Heartwave;
 
 
@@ -404,6 +404,12 @@ void MainWindow::navigateSubMenu() {
         }
         MainWindow::updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
     }
+
+    else if (masterMenu->get(index)->getName() == "VIEW") {
+        masterMenu = masterMenu->get(index);
+        ui->summaryarray->setVisible(true);
+        //MainWindow::updateMenu("LOG/HISTORY", sessionsArray); -> this lists the sessions array
+    }
 }
 //this function allows the user to get back to the main menu from whichever menu they are currently in2
 void MainWindow::navigateToMainMenu() {
@@ -448,6 +454,7 @@ void MainWindow::initGraph()
 
 
 void MainWindow::navigateBack() {
+    ui->summaryarray->setVisible(false);
     ui->breathPaceComboBox->setVisible(false);
     if(masterMenu->getName() == "MAIN MENU") {
         return;
@@ -492,6 +499,7 @@ void MainWindow::on_breathPaceComboBox_currentIndexChanged(int index)
 
 void MainWindow::on_offButton_clicked()
 {
+
     if(power == false){
             turnOnDevice();
             this->power =true;
@@ -500,14 +508,20 @@ void MainWindow::on_offButton_clicked()
     }
 }
 
+
+
 void MainWindow::shutOffDevice()
 {
     this->killTimer(timerID);
+
+    //set screens black
     ui->mainMenuListView->setStyleSheet("background-color: black;color: black; selection-background-color: black; selection-color:black");
     ui->summary->setStyleSheet("background-color: black");
 
     this->power = false;
 
+
+    //disable buttons
     ui->upButton->setEnabled(false);
     ui->downButton->setEnabled(false);
     ui->selectButton->setEnabled(false);
