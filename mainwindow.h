@@ -25,7 +25,7 @@ public:
     void updateGraph();
     void endOfGraph();
     void updateLight();
-    void initDevice();
+    void turnOnDevice();
     void shutOffDevice();
 
 
