@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     killTimer(timerID);
-
     ui->graph->setVisible(false);
     ui->summary->setVisible(false);
 
@@ -91,10 +90,13 @@ void MainWindow::initDevice()
     ui->mainMenuListView->setStyleSheet("background-color: white");
     ui->summary->setStyleSheet("background-color: white");
     ui->graph->setStyleSheet("background-color: white");
+<<<<<<< Updated upstream
+=======
+    ui->mainMenuListView->clear();
+>>>>>>> Stashed changes
     masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
     mainMenu = masterMenu;
 
-    ui->mainMenuListView->clear();
     initializeMainMenu(masterMenu);
 
     this->timerID = startTimer(300);
@@ -165,10 +167,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
                 ui->summary->setVisible(true);
                 //ui->summary->setPlainText(QString::fromStdString(heartwave->currentSession->generateSummary()));
                 ui->summary->setPlainText(heartwave->currentSession->generateSummary());
-                heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
-                //temp.append(heartwave->currentSession->generateSummary());
-                //ui->summaryarray->setPlainText(temp);
-                qInfo("How many times does this run");
 
             } else {
                 ui->summary->setVisible(false);
