@@ -10,17 +10,119 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow), timerID(0), power(false)
 {
     ui->setupUi(this);
-    killTimer(timerID);
+
     ui->graph->setVisible(false);
     ui->summary->setVisible(false);
 
     this->heartwave = new Heartwave;
 
+
+
     initGraph();
     heartwave = new Heartwave();
     ui->mainMenuListView->setStyleSheet("background-color: black");
     ui->breathPaceComboBox->setVisible(false);
+
+    masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
+    initializeInterface(masterMenu);
+
+
+
+
 }
+
+
+void MainWindow::initializeInterface(Menu* m) {
+
+    // Initial button states.
+    ui->batteryLabel->setNum(100);
+    ui->upButton->setEnabled(false);
+    ui->downButton->setEnabled(false);
+    ui->selectButton->setEnabled(false);
+    ui->menuButton->setEnabled(false);
+    ui->returnButton->setEnabled(false);
+    ui->leftButton->setEnabled(false);
+    ui->rightButton->setEnabled(false);
+
+    // Slot connections.
+    connect(ui->upButton, &QPushButton::pressed, this, &MainWindow::navigateUpMenu);
+    connect(ui->downButton, &QPushButton::pressed, this, &MainWindow::navigateDownMenu);
+    connect(ui->selectButton, &QPushButton::pressed, this, &MainWindow::navigateSubMenu);
+    connect(ui->menuButton, &QPushButton::pressed, this, &MainWindow::navigateToMainMenu);
+    connect(ui->returnButton, &QPushButton::pressed, this, &MainWindow::navigateBack);
+    connect(ui->rightButton, &QPushButton::pressed,  this, &MainWindow::navigateRightMenu);
+
+    // Menu Element Setups.
+
+    Menu* settings = new Menu("SETTINGS", {"BREATH PACER"}, m);
+    Menu* sessions = new Menu("SELECT SESSION", {"START SESSION 1", "START SESSION 2", "START SESSION 3"}, m);
+    Menu* history = new Menu("LOG/HISTORY", {"VIEW","CLEAR"}, m);
+
+    m->addChildMenu(settings);
+    m->addChildMenu(sessions);
+    m->addChildMenu(history);
+    Menu* pacer = new Menu("BREATH PACER", {"CHANGE IN DROP BOX"}, settings);
+    settings->addChildMenu(pacer);
+    Menu* startSession1 = new Menu("START SESSION 1", {"Currently running session 1 (click to end)"}, sessions);
+    Menu* startSession2 = new Menu("START SESSION 2", {"Currently running session 2 (click to end)"}, sessions);
+    Menu* startSession3 = new Menu("START SESSION 3", {"Currently running session 3 (click to end)"}, sessions);
+    Menu* endSession1 = new Menu("Currently running session 1 (click to end)", {}, startSession1);
+    Menu* endSession2 = new Menu("Currently running session 2 (click to end)", {}, startSession2);
+    Menu* endSession3 = new Menu("Currently running session 3 (click to end)", {}, startSession3);
+    Menu* shutDown = new Menu("",{},nullptr);
+    sessions->addChildMenu(startSession1);
+    sessions->addChildMenu(startSession2);
+    sessions->addChildMenu(startSession3);
+    startSession1->addChildMenu(endSession1);
+    startSession2->addChildMenu(endSession2);
+    startSession3->addChildMenu(endSession3);
+    Menu* viewHistory = new Menu("VIEW", {}, history);
+    Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
+    history->addChildMenu(viewHistory);
+    history->addChildMenu(clearHistory);
+
+
+
+}
+
+
+
+
+void MainWindow::turnOnDevice()
+{
+    ui->mainMenuListView->setStyleSheet("background-color: white");
+    ui->summary->setStyleSheet("background-color: white");
+    ui->graph->setStyleSheet("background-color: white");
+    ui->mainMenuListView->clear();
+    mainMenu = masterMenu;
+
+    killTimer(timerID);
+    this->timerID = startTimer(300);
+
+
+
+
+
+    activeQListWidget = ui->mainMenuListView;
+    activeQListWidget->addItems(masterMenu->getMenuItems());
+    activeQListWidget->setCurrentRow(0);
+    ui->menuLabel->setText(masterMenu->getName());
+    ui->breathPaceComboBox->setVisible(false);
+
+    heartwave->setActivePulseReading(false);
+
+    // Enable all buttons
+
+    ui->upButton->setEnabled(true);
+    ui->downButton->setEnabled(true);
+    ui->selectButton->setEnabled(true);
+    ui->menuButton->setEnabled(true);
+    ui->returnButton->setEnabled(true);
+    ui->leftButton->setEnabled(true);
+    ui->rightButton->setEnabled(true);
+
+}
+
 
 //function updates the info of graph each cycle of clock
 //it uses currentGraphSecond global variable to index array
@@ -42,7 +144,6 @@ void MainWindow::updateGraph(){
 
 void MainWindow::endOfGraph()
 {
-    currentGraphSecond = 0;
     this->heartwave->setActivePulseReading(false);
     ui->graph->replot();
     QPixmap  noLight(":/lightsPictures/noLights.png");
@@ -85,35 +186,7 @@ void MainWindow::updateLight()
 
 
 
-void MainWindow::initDevice()
-{
-    ui->mainMenuListView->setStyleSheet("background-color: white");
-    ui->summary->setStyleSheet("background-color: white");
-    ui->graph->setStyleSheet("background-color: white");
-    ui->mainMenuListView->clear();
-    masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
-    mainMenu = masterMenu;
 
-    initializeMainMenu(masterMenu);
-
-    this->timerID = startTimer(300);
-    activeQListWidget = ui->mainMenuListView;
-    activeQListWidget->addItems(masterMenu->getMenuItems());
-    activeQListWidget->setCurrentRow(0);
-    ui->menuLabel->setText(masterMenu->getName());
-    ui->breathPaceComboBox->setVisible(false);
-
-    connect(ui->upButton, &QPushButton::pressed, this, &MainWindow::navigateUpMenu);
-    connect(ui->downButton, &QPushButton::pressed, this, &MainWindow::navigateDownMenu);
-    connect(ui->selectButton, &QPushButton::pressed, this, &MainWindow::navigateSubMenu);
-    connect(ui->menuButton, &QPushButton::pressed, this, &MainWindow::navigateToMainMenu);
-    connect(ui->returnButton, &QPushButton::pressed, this, &MainWindow::navigateBack);
-    connect(ui->rightButton, &QPushButton::pressed,  this, &MainWindow::navigateRightMenu);
-
-
-    heartwave->setActivePulseReading(false);
-
-}
 
 MainWindow::~MainWindow()
 {
@@ -182,38 +255,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
         }
 
     }
-}
-
-void MainWindow::initializeMainMenu(Menu* m) {
-
-    Menu* settings = new Menu("SETTINGS", {"BREATH PACER"}, m);
-    Menu* sessions = new Menu("SELECT SESSION", {"START SESSION 1", "START SESSION 2", "START SESSION 3"}, m);
-    Menu* history = new Menu("LOG/HISTORY", {"VIEW","CLEAR"}, m);
-
-    m->addChildMenu(settings);
-    m->addChildMenu(sessions);
-    m->addChildMenu(history);
-    Menu* pacer = new Menu("BREATH PACER", {"CHANGE IN DROP BOX"}, settings);
-    settings->addChildMenu(pacer);
-    Menu* startSession1 = new Menu("START SESSION 1", {"Currently running session 1 (click to end)"}, sessions);
-    Menu* startSession2 = new Menu("START SESSION 2", {"Currently running session 2 (click to end)"}, sessions);
-    Menu* startSession3 = new Menu("START SESSION 3", {"Currently running session 3 (click to end)"}, sessions);
-    Menu* endSession1 = new Menu("Currently running session 1 (click to end)", {}, startSession1);
-    Menu* endSession2 = new Menu("Currently running session 2 (click to end)", {}, startSession2);
-    Menu* endSession3 = new Menu("Currently running session 3 (click to end)", {}, startSession3);
-    Menu* shutDown = new Menu("",{},nullptr);
-    sessions->addChildMenu(startSession1);
-    sessions->addChildMenu(startSession2);
-    sessions->addChildMenu(startSession3);
-    startSession1->addChildMenu(endSession1);
-    startSession2->addChildMenu(endSession2);
-    startSession3->addChildMenu(endSession3);
-    Menu* viewHistory = new Menu("VIEW", {}, history);
-    Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
-    history->addChildMenu(viewHistory);
-    history->addChildMenu(clearHistory);
-
-
 }
 
 void MainWindow::navigateUpMenu() {
@@ -474,7 +515,7 @@ void MainWindow::on_breathPaceComboBox_currentIndexChanged(int index)
 void MainWindow::on_offButton_clicked()
 {
     if(power == false){
-            initDevice();
+            turnOnDevice();
             this->power =true;
     }else{
         shutOffDevice();
@@ -484,12 +525,18 @@ void MainWindow::on_offButton_clicked()
 void MainWindow::shutOffDevice()
 {
     this->killTimer(timerID);
-    ui->mainMenuListView->setStyleSheet("background-color: black");
+    ui->mainMenuListView->setStyleSheet("background-color: black;color: black; selection-background-color: black; selection-color:black");
     ui->summary->setStyleSheet("background-color: black");
 
     this->power = false;
 
-//    ui->mainMenuListView->setStyleSheet("font: black");
+    ui->upButton->setEnabled(false);
+    ui->downButton->setEnabled(false);
+    ui->selectButton->setEnabled(false);
+    ui->menuButton->setEnabled(false);
+    ui->returnButton->setEnabled(false);
+    ui->leftButton->setEnabled(false);
+    ui->rightButton->setEnabled(false);
 }
 
 void MainWindow::on_disconnectButton_clicked()
