@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     killTimer(timerID);
-
     ui->graph->setVisible(false);
     ui->summary->setVisible(false);
 
@@ -91,11 +90,10 @@ void MainWindow::initDevice()
     ui->mainMenuListView->setStyleSheet("background-color: white");
     ui->summary->setStyleSheet("background-color: white");
     ui->graph->setStyleSheet("background-color: white");
-
+    ui->mainMenuListView->clear();
     masterMenu = new Menu("MAIN MENU", {"SETTINGS","SELECT SESSION","LOG/HISTORY"}, nullptr);
     mainMenu = masterMenu;
 
-    ui->mainMenuListView->clear();
     initializeMainMenu(masterMenu);
 
     this->timerID = startTimer(300);
@@ -110,6 +108,7 @@ void MainWindow::initDevice()
     connect(ui->selectButton, &QPushButton::pressed, this, &MainWindow::navigateSubMenu);
     connect(ui->menuButton, &QPushButton::pressed, this, &MainWindow::navigateToMainMenu);
     connect(ui->returnButton, &QPushButton::pressed, this, &MainWindow::navigateBack);
+    connect(ui->rightButton, &QPushButton::pressed,  this, &MainWindow::navigateRightMenu);
 
 
     heartwave->setActivePulseReading(false);
@@ -164,6 +163,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
             if(heartwave->currentSession->ended && heartwave->getActivePulseReading() == true) {
                 ui->summary->setVisible(true);
                 ui->summary->setPlainText(heartwave->currentSession->generateSummary());
+
             } else {
                 ui->summary->setVisible(false);
             }
@@ -208,9 +208,9 @@ void MainWindow::initializeMainMenu(Menu* m) {
     startSession1->addChildMenu(endSession1);
     startSession2->addChildMenu(endSession2);
     startSession3->addChildMenu(endSession3);
-//    Menu* viewHistory = new Menu("VIEW", heartwave->summaryArray, history);
+    Menu* viewHistory = new Menu("VIEW", {}, history);
     Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
-//    history->addChildMenu(viewHistory);
+    history->addChildMenu(viewHistory);
     history->addChildMenu(clearHistory);
 
 
@@ -219,12 +219,17 @@ void MainWindow::initializeMainMenu(Menu* m) {
 void MainWindow::navigateUpMenu() {
 
     int nextIndex = activeQListWidget->currentRow() - 1;
+    qDebug() << nextIndex;
 
     if (nextIndex < 0) {
         nextIndex = activeQListWidget->count() - 1;
     }
 
     activeQListWidget->setCurrentRow(nextIndex);
+}
+void MainWindow::navigateRightMenu() {
+    qDebug() << activeQListWidget->currentRow();
+    qDebug() << masterMenu->getName();
 }
 
 void MainWindow::navigateDownMenu() {
@@ -255,6 +260,7 @@ void MainWindow::navigateSubMenu() {
     if (masterMenu->getName() == "VIEW") {
         return;
     }
+
     if(masterMenu->getName() == "BREATH PACER") {
         ui->breathPaceComboBox->setVisible(true);
         return;
@@ -468,8 +474,8 @@ void MainWindow::on_breathPaceComboBox_currentIndexChanged(int index)
 void MainWindow::on_offButton_clicked()
 {
     if(power == false){
-        initDevice();
-        this->power =true;
+            initDevice();
+            this->power =true;
     }else{
         shutOffDevice();
     }

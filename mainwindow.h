@@ -54,5 +54,6 @@ private slots:
     void on_offButton_clicked();
     void on_disconnectButton_clicked();
     void on_reconnectButton_clicked();
+    void navigateRightMenu();
 };
 #endif // MAINWINDOW_H
