@@ -207,6 +207,10 @@ void MainWindow::updateBeep() {
     }
 
 }
+
+
+
+
 void MainWindow::timerEvent(QTimerEvent *event)
 {
     updateLight();
@@ -259,8 +263,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
 
         }
-
-
         if(heartwave->getActivePulseReading()) {
             // Heartwave monitor connected UI.
             QPixmap  red(":/lightsPictures/redHeart.png");
@@ -309,19 +311,25 @@ void MainWindow::updateMenu(const QString selectedMenuItem, const QStringList me
     ui->menuLabel->setText(selectedMenuItem);
 }
 
+
+
 void MainWindow::navigateSubMenu() {
-
     int index = activeQListWidget->currentRow();
-    if (index < 0) return;
-
-    if (masterMenu->getName() == "VIEW") {
-        return;
+    if (masterMenu->getMenuItems()[index] == "VIEW") {
+        ui->summaryarray->setVisible(true);
+        qInfo()<<"hello";
     }
+
+
+
+    if (index < 0) return;
+    //prevent crash if ok button selected
 
     if(masterMenu->getName() == "BREATH PACER") {
         ui->breathPaceComboBox->setVisible(true);
         return;
     }
+    //if statements to run the correct session that the user selects
     if(masterMenu->getName() == "SELECT SESSION"){
         currentGraphSecond = 0;
 
@@ -350,7 +358,7 @@ void MainWindow::navigateSubMenu() {
             ui->graph->setVisible(true);
         }
     }
-
+    //if statements to end the session when user desires to
     if(masterMenu->getName() == "START SESSION 1") {
         this->heartwave->setActivePulseReading(true);
         heartwave->setCurrentSession(1);
@@ -385,7 +393,7 @@ void MainWindow::navigateSubMenu() {
         }
     }
 
-
+    //allows user to go into clear menu, and decide if they want to clear the session history if user desires
     if (masterMenu->getName() == "CLEAR") {
         if (masterMenu->getMenuItems()[index] == "YES") {
             ui->summaryarray->setText("");
@@ -397,28 +405,13 @@ void MainWindow::navigateSubMenu() {
 
         }
     }
-
-        //Start of heartwave session
+    //start heartwave session
     if (masterMenu->get(index)->getMenuItems().length() > 0) {
         masterMenu = masterMenu->get(index);
         if(masterMenu->getName() == "SELECT SESSION") {
-            //if there is no current session selected
-            if(this->heartwave->currentSession == nullptr){
-                qInfo()<<"no current session";
-            }
-
             this->heartwave->setActivePulseReading(true);
-
-
         }
         MainWindow::updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
-
-    }
-
-    else if (masterMenu->get(index)->getName() == "VIEW") {
-        masterMenu = masterMenu->get(index);
-        ui->summaryarray->setVisible(true);
-        //MainWindow::updateMenu("LOG/HISTORY", sessionsArray); -> this lists the sessions array
     }
 }
 

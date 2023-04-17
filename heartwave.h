@@ -12,6 +12,7 @@ class Heartwave
 {
 public:
     Heartwave();
+    Heartwave(bool f);
     std::vector<Session*> sessions;
     Session * currentSession;
     QString summaryArray;
