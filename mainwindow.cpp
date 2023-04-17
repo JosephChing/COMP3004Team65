@@ -87,7 +87,7 @@ void MainWindow::initializeInterface(Menu* m) {
 
 
 
-
+//This functions allows the user to turn on the device and be ready for use
 void MainWindow::turnOnDevice()
 {
     ui->mainMenuListView->setStyleSheet("background-color: white");
@@ -274,7 +274,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
     }
 }
-
+//This function allows the user to use the up button to navigate the menu
 void MainWindow::navigateUpMenu() {
 
     int nextIndex = activeQListWidget->currentRow() - 1;
@@ -290,7 +290,7 @@ void MainWindow::navigateRightMenu() {
     qDebug() << activeQListWidget->currentRow();
     qDebug() << masterMenu->getName();
 }
-
+//This functiona llows the user to use the down button to navigate the menu
 void MainWindow::navigateDownMenu() {
 
     int nextIndex = activeQListWidget->currentRow() + 1;
@@ -301,7 +301,7 @@ void MainWindow::navigateDownMenu() {
 
     activeQListWidget->setCurrentRow(nextIndex);
 }
-
+//This function updates the menu to the screen
 void MainWindow::updateMenu(const QString selectedMenuItem, const QStringList menuItems) {
 
     activeQListWidget->clear();
@@ -413,22 +413,20 @@ void MainWindow::navigateSubMenu() {
         }
         MainWindow::updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
     }
-}
 
+    else if (masterMenu->get(index)->getName() == "VIEW") {
+        masterMenu = masterMenu->get(index);
+        ui->summaryarray->setVisible(true);
+        //MainWindow::updateMenu("LOG/HISTORY", sessionsArray); -> this lists the sessions array
+    }
+}
+//this function allows the user to get back to the main menu from whichever menu they are currently in2
 void MainWindow::navigateToMainMenu() {
     ui->breathPaceComboBox->setVisible(false);
+    //checks to see if user is already in main menu
     if(masterMenu->getName() == "MAIN MENU") {
-        return;
-    }
-    if (masterMenu->getParent()->getName() == "SESSIONS") {
-            // stop the session get the time, and add to sessions array
-        }
-        else {
-            // same shit as above if theres a session going on and it hasnt ended
-        }
-
-    if (masterMenu->getName() == "MAIN MENU") {
         activeQListWidget->setCurrentRow(0);
+        return;
     }
     else {
         masterMenu = masterMenu->getParent();
@@ -440,8 +438,12 @@ void MainWindow::navigateToMainMenu() {
     while (masterMenu->getName() != "MAIN MENU") {
         masterMenu = masterMenu->getParent();
     }
+    heartwave->setActivePulseReading(false);
+
+    heartwave->currentSession->stop();
 
     updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
+
 }
 
 
@@ -468,13 +470,6 @@ void MainWindow::navigateBack() {
     }
     ui->rightButton->blockSignals(true);
     ui->leftButton->blockSignals(true);
-        if (masterMenu->getParent()->getName() == "START SESSION") {
-            // stop the session get the time, and add to sessions array
-        }
-        else {
-            // same shit as above if theres a session going on and it hasnt ended
-        }
-
     if (masterMenu->getName() == "MAIN MENU") {
         activeQListWidget->setCurrentRow(0);
     }
@@ -491,18 +486,6 @@ void MainWindow::navigateBack() {
 
     heartwave->currentSession->stop();
 
-
-    // Add session summary if it exists
-//    if(heartwave->currentSession != nullptr) {
-//        if (heartwave->currentSession->ended == true ) {
-//            if(heartwave->currentSession->generateSummary() != "") {
-//                heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
-//                qInfo() << "Appending: " << heartwave->currentSession->generateSummary();
-//            }
-//        }
-////        heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
-////        qInfo() << "Appending: " << heartwave->currentSession->generateSummary();
-//    }
     initGraph();
 }
 
@@ -566,4 +549,3 @@ void MainWindow::on_reconnectButton_clicked()
 {
     heartwave->setActivePulseReading(true);
 }
-

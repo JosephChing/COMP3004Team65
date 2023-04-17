@@ -16,7 +16,6 @@ public:
     std::vector<Session*> sessions;
     Session * currentSession;
     QString summaryArray;
-//    std::vector<QString> sessionSummaryRecords;
     Battery * battery;
     BreathPacer * breathPacer;
 
@@ -33,7 +32,6 @@ public:
 
     void turnOn();
     void turnOff();
-//    std::string currentLight();
 
 
 private:
