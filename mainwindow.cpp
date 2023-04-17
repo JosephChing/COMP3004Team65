@@ -87,7 +87,7 @@ void MainWindow::initializeInterface(Menu* m) {
 
 
 
-
+//This functions allows the user to turn on the device and be ready for use
 void MainWindow::turnOnDevice()
 {
     ui->mainMenuListView->setStyleSheet("background-color: white");
@@ -272,7 +272,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
     }
 }
-
+//This function allows the user to use the up button to navigate the menu
 void MainWindow::navigateUpMenu() {
 
     int nextIndex = activeQListWidget->currentRow() - 1;
@@ -288,7 +288,7 @@ void MainWindow::navigateRightMenu() {
     qDebug() << activeQListWidget->currentRow();
     qDebug() << masterMenu->getName();
 }
-
+//This functiona llows the user to use the down button to navigate the menu
 void MainWindow::navigateDownMenu() {
 
     int nextIndex = activeQListWidget->currentRow() + 1;
@@ -299,7 +299,7 @@ void MainWindow::navigateDownMenu() {
 
     activeQListWidget->setCurrentRow(nextIndex);
 }
-
+//This function updates the menu to the screen
 void MainWindow::updateMenu(const QString selectedMenuItem, const QStringList menuItems) {
 
     activeQListWidget->clear();
@@ -308,20 +308,19 @@ void MainWindow::updateMenu(const QString selectedMenuItem, const QStringList me
 
     ui->menuLabel->setText(selectedMenuItem);
 }
-
+//This function allows the user to access the subMenus
 void MainWindow::navigateSubMenu() {
-
     int index = activeQListWidget->currentRow();
     if (index < 0) return;
-
+    //prevent crash if ok button selected
     if (masterMenu->getName() == "VIEW") {
         return;
     }
-
     if(masterMenu->getName() == "BREATH PACER") {
         ui->breathPaceComboBox->setVisible(true);
         return;
     }
+    //if statements to run the correct session that the user selects
     if(masterMenu->getName() == "SELECT SESSION"){
         currentGraphSecond = 0;
 
@@ -350,7 +349,7 @@ void MainWindow::navigateSubMenu() {
             ui->graph->setVisible(true);
         }
     }
-
+    //if statements to end the session when user desires to
     if(masterMenu->getName() == "START SESSION 1") {
         this->heartwave->setActivePulseReading(true);
         heartwave->setCurrentSession(1);
@@ -385,7 +384,7 @@ void MainWindow::navigateSubMenu() {
         }
     }
 
-
+    //allows user to go into clear menu, and decide if they want to clear the session history if user desires
     if (masterMenu->getName() == "CLEAR") {
         if (masterMenu->getMenuItems()[index] == "YES") {
             ui->summaryarray->setText("");
@@ -397,22 +396,13 @@ void MainWindow::navigateSubMenu() {
 
         }
     }
-
-        //Start of heartwave session
+    //start heartwave session
     if (masterMenu->get(index)->getMenuItems().length() > 0) {
         masterMenu = masterMenu->get(index);
         if(masterMenu->getName() == "SELECT SESSION") {
-            //if there is no current session selected
-            if(this->heartwave->currentSession == nullptr){
-                qInfo()<<"no current session";
-            }
-
             this->heartwave->setActivePulseReading(true);
-
-
         }
         MainWindow::updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
-
     }
 
     else if (masterMenu->get(index)->getName() == "VIEW") {
@@ -421,21 +411,13 @@ void MainWindow::navigateSubMenu() {
         //MainWindow::updateMenu("LOG/HISTORY", sessionsArray); -> this lists the sessions array
     }
 }
-
+//this function allows the user to get back to the main menu from whichever menu they are currently in2
 void MainWindow::navigateToMainMenu() {
     ui->breathPaceComboBox->setVisible(false);
+    //checks to see if user is already in main menu
     if(masterMenu->getName() == "MAIN MENU") {
-        return;
-    }
-    if (masterMenu->getParent()->getName() == "SESSIONS") {
-            // stop the session get the time, and add to sessions array
-        }
-        else {
-            // same shit as above if theres a session going on and it hasnt ended
-        }
-
-    if (masterMenu->getName() == "MAIN MENU") {
         activeQListWidget->setCurrentRow(0);
+        return;
     }
     else {
         masterMenu = masterMenu->getParent();
@@ -447,8 +429,12 @@ void MainWindow::navigateToMainMenu() {
     while (masterMenu->getName() != "MAIN MENU") {
         masterMenu = masterMenu->getParent();
     }
+    heartwave->setActivePulseReading(false);
+
+    heartwave->currentSession->stop();
 
     updateMenu(masterMenu->getName(), masterMenu->getMenuItems());
+
 }
 
 
@@ -475,13 +461,6 @@ void MainWindow::navigateBack() {
     }
     ui->rightButton->blockSignals(true);
     ui->leftButton->blockSignals(true);
-        if (masterMenu->getParent()->getName() == "START SESSION") {
-            // stop the session get the time, and add to sessions array
-        }
-        else {
-            // same shit as above if theres a session going on and it hasnt ended
-        }
-
     if (masterMenu->getName() == "MAIN MENU") {
         activeQListWidget->setCurrentRow(0);
     }
@@ -498,18 +477,6 @@ void MainWindow::navigateBack() {
 
     heartwave->currentSession->stop();
 
-
-    // Add session summary if it exists
-//    if(heartwave->currentSession != nullptr) {
-//        if (heartwave->currentSession->ended == true ) {
-//            if(heartwave->currentSession->generateSummary() != "") {
-//                heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
-//                qInfo() << "Appending: " << heartwave->currentSession->generateSummary();
-//            }
-//        }
-////        heartwave->summaryArray.append(heartwave->currentSession->generateSummary());
-////        qInfo() << "Appending: " << heartwave->currentSession->generateSummary();
-//    }
     initGraph();
 }
 
