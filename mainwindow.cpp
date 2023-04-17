@@ -424,6 +424,7 @@ void MainWindow::navigateSubMenu() {
 }
 //this function allows the user to get back to the main menu from whichever menu they are currently in2
 void MainWindow::navigateToMainMenu() {
+    ui->summaryarray->setVisible(false);
     ui->breathPaceComboBox->setVisible(false);
     //checks to see if user is already in main menu
     if(masterMenu->getName() == "MAIN MENU") {
@@ -451,7 +452,6 @@ void MainWindow::navigateToMainMenu() {
 
 void MainWindow::initGraph()
 {
-    qInfo("initgraph running");
     ui->graph->clearGraphs();
     ui->graph->clearItems();
     ui->graph->addGraph(0);
